@@ -1,7 +1,7 @@
 import BigSlider from './BigSlider';
 import {View} from 'react-native';
 import React from 'react';
-import {EmptyView} from './EmptyView';
+import {LoadingCurtainsSlider} from './LoadingCurtainsSlider';
 
 export default class CurtainsSlider extends React.Component {
     state = {
@@ -18,39 +18,32 @@ export default class CurtainsSlider extends React.Component {
             curtainState: 0,
             loaded:false
         };
-        setInterval(this.getCurrentState, 2000);
-
     }
 
     componentDidMount() {
-        this.getCurrentState();
+        this.getCurrentState().then().catch();
     }
 
     getCurrentState = () => {
-        return new Promise((resolve, reject) => {
-            fetch('http://192.168.188.37/get-state')
-                .then((response) => response.json())
-                .then((response) => {
-                    this.setState({
-                        openState: response.openState,
-                        closedState: response.closedState,
-                        curtainState: response.state,
-                        loaded: true
-                    });
-                    this.refs.bigSlider.slideTo(response.state);
-                    this.refs.bigSlider.setExtrema(response.openState, response.closedState);
-                    resolve();
-                })
-                .catch((error) => reject(error))
-            ;
-        });
-
+        return fetch('http://192.168.188.37/get-state')
+            .then((response) => response.json())
+            .then((response) => {
+                this.setState({
+                    openState: response.openState,
+                    closedState: response.closedState,
+                    curtainState: response.state,
+                    loaded: true
+                });
+                this.refs.bigSlider.slideTo(response.state);
+                this.refs.bigSlider.setExtrema(response.openState, response.closedState);
+            })
+            .catch(() => this.setState({loaded: false}));
     };
 
     render () {
         return (
             this.state.loaded
-                ? <View style={{height: 100}}>
+                ? <View style={{height: 80}}>
                     <BigSlider
                         trackStyle={{ backgroundColor: 'rgb(59,185,253)' }}
                         maximumValue={this.state.closedState}
@@ -60,12 +53,13 @@ export default class CurtainsSlider extends React.Component {
                             this.setState({ curtainState: Math.round(val) });
                         }}
                         onSlidingComplete={_ => {
-                            fetch('http://192.168.188.37/goto?goal='+this.state.curtainState);
+                            // fetch('http://192.168.188.37/goto?goal='+this.state.curtainState);
+                            console.log('OK')
                         }}
                         ref={'bigSlider'}
                     />
                 </View>
-                : <EmptyView/>
-        )
+                : <LoadingCurtainsSlider/>
+        );
     }
 }

@@ -7,7 +7,7 @@ export class EmptyView extends React.Component {
         return (
             <View style={{flexDirection:'column', flex: 1, alignItems:'center', justifyContent:'center'}}>
                 <Image
-                    source={require('../../images/atom.png')}
+                    source={require('../images/atom.png')}
                     style={{
                         width:Dimensions.get('window').width*.8,
                         height:Dimensions.get('window').width*.8

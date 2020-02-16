@@ -26,7 +26,7 @@ export class TitleView extends React.Component {
                     icon={'plus'}
                     size={28}
                     onPress={() => console.log('Nothing')}
-                    style={{backgroundColor: '#dedede', marginTop: -2}}
+                    style={{backgroundColor: '#dedede', marginTop: -2, marginHorizontal: 0}}
                 />
             </View>
         )

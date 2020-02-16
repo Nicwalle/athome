@@ -7,12 +7,13 @@
  */
 
 import React from 'react';
-import {EmptyView} from './components/EmptyView';
-import {TitleView} from './components/TitleView';
+import {EmptyView} from './EmptyView';
+import {TitleView} from './TitleView';
 import {ScrollView, RefreshControl} from 'react-native';
-import BigSlider from './components/BigSlider';
+import BigSlider from './components/curtainsSlider/BigSlider';
 import {Button, Text} from 'react-native-paper';
-import CurtainsSlider from './components/CurtainsSlider';
+import CurtainsSlider from './components/curtainsSlider/CurtainsSlider';
+import {CurtainsModule} from './modules/curtainsModule';
 
 function wait(timeout) {
     return new Promise(resolve => {
@@ -43,11 +44,9 @@ class App extends React.Component {
                 <TitleView/>
                 <ScrollView
                     style={{flex: 1, flexDirection:'column', margin:16}}
-                    refreshControl={
-                        <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />
-                    }
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}
                 >
-                    <CurtainsSlider ref={'curtainsSlider'}/>
+                    <CurtainsModule/>
                 </ScrollView>
             </>
         );

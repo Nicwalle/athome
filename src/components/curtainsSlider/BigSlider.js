@@ -22,7 +22,7 @@ export default class BigSlider extends Component {
         minimumValue: 0,
         onSlidingStart: () => {},
         onValueChange: () => {},
-        onSlidingComplete: () => {},
+        onSlidingComplete: () => {}
     };
 
     constructor(props) {
@@ -87,16 +87,9 @@ export default class BigSlider extends Component {
                     {unitValue > 0.4
                         ?
                         <Image
-                            source={require('../../images/window-light.png')}
-                            style={{
-                                marginVertical: 10,
-                                marginHorizontal: 20,
-                                aspectRatio: 1,
-                                width: 60,
-                                opacity: (unitValue - 0.4) * 5
-                            }}
+                            source={require('../../../images/window-light.png')}
+                            style={{ ...styles.leftImage, opacity: (unitValue - 0.4) * 5 }}
                         />
-
                         :<View style={{width: ((unitValue-0.1)/0.4)*130}}/>
                     }
                     {this.props.renderLabel
@@ -112,13 +105,8 @@ export default class BigSlider extends Component {
                 <View style={[styles.pendingTrack, { flex: 1 - unitValue }]}>
                     {unitValue < 0.6
                         ?<Image
-                            source={require('../../images/window-color.png')}
-                            style={{
-                                margin: 20,
-                                aspectRatio: 1,
-                                width: 60,
-                                opacity: (0.6 - unitValue) * 5
-                            }}
+                            source={require('../../../images/window-color.png')}
+                            style={{ ...styles.rightImage, opacity: (0.6 - unitValue) * 5}}
                         />
                         :<View/>
                     }
@@ -167,6 +155,17 @@ const styles = StyleSheet.create({
         marginRight: 6,
         alignSelf: 'center',
     },
+    rightImage: {
+        margin: 20,
+        aspectRatio: 1,
+        width: 60,
+    },
+    leftImage: {
+        marginVertical: 10,
+        marginHorizontal: 20,
+        aspectRatio: 1,
+        width: 60
+    }
 });
 
 function formatNumber (x) {
