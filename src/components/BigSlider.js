@@ -11,8 +11,6 @@ import {
     Text,
     View,
     Image,
-    TouchableHighlight,
-    TouchableWithoutFeedback
 } from 'react-native';
 
 export default class BigSlider extends Component {
@@ -20,9 +18,7 @@ export default class BigSlider extends Component {
         value: 0,
         maximumValue: 4000,
         minimumValue: 0,
-        onSlidingStart: () => {},
-        onValueChange: () => {},
-        onSlidingComplete: () => {}
+        onSlidingStart: () => {}
     };
 
     constructor(props) {
@@ -33,13 +29,13 @@ export default class BigSlider extends Component {
         };
 
         this.panResponder = PanResponder.create({
-            onStartShouldSetPanResponder: (e, gestureState) => true,
-            onPanResponderGrant: (evt, gestureState) => {
+            onStartShouldSetPanResponder: () => true,
+            onPanResponderGrant: () => {
                 this.props.onSlidingStart();
                 this.setState({ anchorValue: this.state.value })
             },
             onPanResponderMove: Animated.event([null, {}], { listener: this.handleSlide }),
-            onPanResponderRelease: (evt, gestureState) => {
+            onPanResponderRelease: () => {
                 this.props.onSlidingComplete()
             },
         })
@@ -87,7 +83,7 @@ export default class BigSlider extends Component {
                     {unitValue > 0.4
                         ?
                         <Image
-                            source={require('../../../images/window-light.png')}
+                            source={require('../../images/window-light.png')}
                             style={{ ...styles.leftImage, opacity: (unitValue - 0.4) * 5 }}
                         />
                         :<View style={{width: ((unitValue-0.1)/0.4)*130}}/>
@@ -105,7 +101,7 @@ export default class BigSlider extends Component {
                 <View style={[styles.pendingTrack, { flex: 1 - unitValue }]}>
                     {unitValue < 0.6
                         ?<Image
-                            source={require('../../../images/window-color.png')}
+                            source={require('../../images/window-color.png')}
                             style={{ ...styles.rightImage, opacity: (0.6 - unitValue) * 5}}
                         />
                         :<View/>
@@ -125,6 +121,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(241, 242, 247)',
         borderRadius: 16,
         overflow: 'hidden',
+        height: 80
     },
     pendingTrack: {
         flexDirection:'row-reverse'

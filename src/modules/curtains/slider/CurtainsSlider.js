@@ -1,5 +1,4 @@
-import BigSlider from './BigSlider';
-import {View} from 'react-native';
+import BigSlider from '../../../components/BigSlider';
 import React from 'react';
 import {LoadingCurtainsSlider} from './LoadingCurtainsSlider';
 
@@ -43,7 +42,7 @@ export default class CurtainsSlider extends React.Component {
     render () {
         return (
             this.state.loaded
-                ? <View style={{height: 80}}>
+                ?
                     <BigSlider
                         trackStyle={{ backgroundColor: 'rgb(59,185,253)' }}
                         maximumValue={this.state.closedState}
@@ -58,7 +57,6 @@ export default class CurtainsSlider extends React.Component {
                         }}
                         ref={'bigSlider'}
                     />
-                </View>
                 : <LoadingCurtainsSlider/>
         );
     }
