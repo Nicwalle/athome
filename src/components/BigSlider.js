@@ -80,10 +80,10 @@ export default class BigSlider extends Component {
                 style={[styles.container, this.props.style]}
                 {...this.panResponder.panHandlers}>
                 <View style={[styles.track, { flex: unitValue }, this.props.trackStyle]}>
-                    {unitValue > 0.4
+                    {unitValue > 0.4 && this.props.leftImage
                         ?
                         <Image
-                            source={require('../../images/window-light.png')}
+                            source={this.props.leftImage}
                             style={{ ...styles.leftImage, opacity: (unitValue - 0.4) * 5 }}
                         />
                         :<View style={{width: ((unitValue-0.1)/0.4)*130}}/>
@@ -99,9 +99,9 @@ export default class BigSlider extends Component {
                     <View style={styles.thumb} />
                 </View>
                 <View style={[styles.pendingTrack, { flex: 1 - unitValue }]}>
-                    {unitValue < 0.6
+                    {unitValue < 0.6 && this.props.rightImage
                         ?<Image
-                            source={require('../../images/window-color.png')}
+                            source={this.props.rightImage}
                             style={{ ...styles.rightImage, opacity: (0.6 - unitValue) * 5}}
                         />
                         :<View/>

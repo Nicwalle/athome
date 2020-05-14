@@ -20,14 +20,14 @@ class App extends React.Component {
         };
     }
 
+    curtainsModule;
+
     onRefresh = () => {
-        /*
         this.setState({refreshing: true});
-        this.refs.curtainsModule.refresh()
+        this.curtainsModule.refresh()
             .then(() => this.setState({refreshing: false}))
             .catch((error => console.log(error)))
         ;
-         */
     };
 
     render() {
@@ -38,7 +38,7 @@ class App extends React.Component {
                     style={{flex: 1, flexDirection:'column', margin:16}}
                     refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}
                 >
-                    <CurtainsModule ref={'curtainsModule'}/>
+                    <CurtainsModule ref={(ref) => this.curtainsModule = ref}/>
                 </ScrollView>
             </>
         );
