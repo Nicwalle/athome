@@ -10,6 +10,7 @@ import React from 'react';
 import {TitleView} from './TitleView';
 import {ScrollView, RefreshControl} from 'react-native';
 import {CurtainsModule} from './modules/CurtainsModule';
+import {HueModule} from './modules/HueModule';
 
 class App extends React.Component {
 
@@ -39,6 +40,7 @@ class App extends React.Component {
                     refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}
                 >
                     <CurtainsModule ref={(ref) => this.curtainsModule = ref}/>
+                    <HueModule/>
                 </ScrollView>
             </>
         );
