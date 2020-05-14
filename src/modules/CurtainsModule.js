@@ -48,6 +48,9 @@ export class CurtainsModule extends React.Component {
     render () {
         return (
             <>
+                <View style={{marginBottom:16, alignItems:'center'}}>
+                    <Text>Curtains</Text>
+                </View>
                 <View style={{marginBottom:16}}>
                     <CurtainsSlider
                         ref={'slider'}

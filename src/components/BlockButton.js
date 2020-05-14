@@ -15,7 +15,7 @@ class BlockButton extends React.Component {
         return (
             <>
                 {!this.props.disabled
-                    ?<TouchableOpacity style={{ ...styles.button, backgroundColor: this.props.backgroundColor }} onPress={this.props.onPress} onPressIn={this.props.onPress}>
+                    ?<TouchableOpacity style={{ ...styles.button, backgroundColor: this.props.backgroundColor }} onPress={this.props.onPress} onPressIn={this.props.onPressIn}>
                         <Icon name={this.props.icon} size={24} color={this.props.color} />
                     </TouchableOpacity>
                     :<View style={{ ...styles.button, backgroundColor: 'rgb(173,178,182)' }} onPress={()=>{}}>
