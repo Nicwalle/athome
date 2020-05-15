@@ -1,10 +1,7 @@
 import {View} from 'react-native';
 import React from 'react';
-import CurtainsSlider from './curtains/slider/CurtainsSlider';
 import BlockButton from '../components/BlockButton';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import {Text, TextInput} from 'react-native-paper';
-import BigSlider from '../components/BigSlider';
+import {Text} from 'react-native-paper';
 
 export class HueModule extends React.Component {
     constructor() {
@@ -22,7 +19,7 @@ export class HueModule extends React.Component {
                     <Text>Philips Hue</Text>
                 </View>
                 <View style={{flex: 1, flexDirection:'row', marginBottom:16}}>
-                    <BlockButton icon={'tv'} color={'#fff'} backgroundColor={'#9b59b6'}
+                    <BlockButton icon={'tv'} color={'#fff'} text={'Harry Potter'} gradientColors={['#2face2', '#c36976', '#f7cba5']}
                                  onPress={() => {
                                      if (this.state.harryPotterOn) {
                                          fetch(this.state.hueAddress + '/groups/1/action', {
