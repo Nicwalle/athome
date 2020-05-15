@@ -34,7 +34,7 @@ export default class BigSlider extends Component {
                 this.props.onSlidingStart();
                 this.setState({ anchorValue: this.state.value })
             },
-            onPanResponderMove: Animated.event([null, {}], { listener: this.handleSlide }),
+            onPanResponderMove: Animated.event([null, {}], { listener: this.handleSlide, useNativeDriver: false }),
             onPanResponderRelease: () => {
                 this.props.onSlidingComplete()
             },
@@ -73,7 +73,7 @@ export default class BigSlider extends Component {
 
     render () {
         const value = this.state.value;
-        const unitValue = (value - this.props.minimumValue) / this.state.range + 0.1 * (this.state.range - value)/this.state.range;
+        let unitValue = (value - this.props.minimumValue) / this.state.range + 0.1 * (this.state.range - value)/this.state.range;
         return (
             <View
                 onLayout={this.onLayout}

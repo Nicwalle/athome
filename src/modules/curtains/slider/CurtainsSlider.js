@@ -19,12 +19,17 @@ export default class CurtainsSlider extends React.Component {
                     trackStyle={{ backgroundColor: 'rgb(59,185,253)' }}
                     maximumValue={this.props.closedState}
                     minimumValue={this.props.openState}
-                    value={this.state.goto !== -1 ? this.state.goto : this.props.state}
+                    value={this.state.moving?this.state.goto:this.props.state}
                     onValueChange={val => {
-                        this.setState({ goto: Math.round(val) });
+                        this.setState({ moving: true, goto: Math.round(val) });
                     }}
                     onSlidingComplete={() => {
-                        fetch(this.props.curtainsAddress + '/goto?goal='+this.state.goto).done();
+                        this.props.apiRequest('/goto', {goal: this.state.goto})
+                            .then(response => {
+                                this.props.setCurtainState(response.objective);
+                                this.setState({moving: false});
+                            })
+                            .done();
                     }}
                     ref={ref => {
                         this.bigSlider = ref;
