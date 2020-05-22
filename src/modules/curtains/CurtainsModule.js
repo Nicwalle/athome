@@ -1,10 +1,10 @@
 import {View} from 'react-native';
 import React from 'react';
-import CurtainsSlider from './curtains/slider/CurtainsSlider';
-import BlockButton from '../components/BlockButton';
+import CurtainsSlider from './slider/CurtainsSlider';
+import BlockButton from '../../components/BlockButton';
 import {Text} from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
-import CurtainsSettings from './curtains/configurator/CurtainsSettings';
+import CurtainsSettings from './configurator/CurtainsSettings';
 
 export class CurtainsModule extends React.Component {
     refresh = () => this.getCurrentState();

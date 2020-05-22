@@ -1,6 +1,8 @@
 import {Text, View} from 'react-native';
 import React from 'react';
 import {IconButton} from 'react-native-paper';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import AddItemSheet from './modules/app/AddItemSheet';
 
 export class TitleView extends React.Component {
     styles = {
@@ -16,19 +18,29 @@ export class TitleView extends React.Component {
             color: '#212121',
             flex: 1,
         },
+        addItemButton: {
+            backgroundColor: '#dedede',
+            marginTop: -2,
+            marginHorizontal: 0
+        }
     };
+
+    addItemSheet;
 
     render () {
         return (
-            <View style={this.styles.titleView}>
-                <Text style={this.styles.titleText}>Athome</Text>
-                <IconButton
-                    icon={'plus'}
-                    size={28}
-                    onPress={() => console.log('Nothing')}
-                    style={{backgroundColor: '#dedede', marginTop: -2, marginHorizontal: 0}}
-                />
-            </View>
+            <>
+                <View style={this.styles.titleView}>
+                    <Text style={this.styles.titleText}>Athome</Text>
+                    <IconButton
+                        icon={'plus'}
+                        size={28}
+                        onPress={() => this.addItemSheet.open()}
+                        style={this.styles.addItemButton}
+                    />
+                </View>
+                <AddItemSheet ref={(ref) => this.addItemSheet = ref}/>
+            </>
         )
     }
 }

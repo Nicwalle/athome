@@ -9,8 +9,8 @@
 import React from 'react';
 import {TitleView} from './TitleView';
 import {ScrollView, RefreshControl} from 'react-native';
-import {CurtainsModule} from './modules/CurtainsModule';
-import {HueModule} from './modules/HueModule';
+import {CurtainsModule} from './modules/curtains/CurtainsModule';
+import {HueModule} from './modules/hue/HueModule';
 
 class App extends React.Component {
 
@@ -35,10 +35,9 @@ class App extends React.Component {
         return (
             <>
                 <TitleView/>
-                <ScrollView
+                <ScrollView theme={this.props.theme}
                     style={{flex: 1, flexDirection:'column', margin:16}}
-                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}
-                >
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}>
                     <CurtainsModule ref={(ref) => this.curtainsModule = ref}/>
                     <HueModule/>
                 </ScrollView>

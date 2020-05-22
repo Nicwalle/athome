@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import React from 'react';
-import BlockButton from '../components/BlockButton';
+import BlockButton from '../../components/BlockButton';
 import {Text} from 'react-native-paper';
 
 export class HueModule extends React.Component {
@@ -19,7 +19,7 @@ export class HueModule extends React.Component {
                     <Text>Philips Hue</Text>
                 </View>
                 <View style={{flex: 1, flexDirection:'row', marginBottom:16}}>
-                    <BlockButton icon={'tv'} color={'#fff'} text={'Harry Potter'} gradientColors={['#2face2', '#c36976', '#f7cba5']}
+                    <BlockButton icon={'tv'} color={'#fff'} text={'Harry Potter'} gradientColors={['rgb(38, 147, 255)', 'rgb(46, 166, 255)', 'rgb(255, 175, 153)']}
                                  onPress={() => {
                                      if (this.state.harryPotterOn) {
                                          fetch(this.state.hueAddress + '/groups/1/action', {

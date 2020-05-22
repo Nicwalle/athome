@@ -1,21 +1,25 @@
-/**
- * @format
- */
+import 'react-native-gesture-handler';
 
 import * as React from 'react';
 import {AppRegistry, StatusBar} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import App from './src/App';
 import {name as appName} from './app.json';
-import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
+import {DefaultTheme, DarkTheme, Provider as PaperProvider} from 'react-native-paper';
+
+
 
 export default function Main() {
     const theme = {
-        ...DefaultTheme
+        ...DarkTheme,
+        dark:true
     };
     return (
-        <PaperProvider theme={theme}>
-            <StatusBar backgroundColor={'#efefef'} barStyle={'dark-content'} />
-            <App />
+        <PaperProvider>
+            <NavigationContainer>
+            <StatusBar barStyle={'dark-content'} />
+            <App/>
+            </NavigationContainer>
         </PaperProvider>
     );
 }
