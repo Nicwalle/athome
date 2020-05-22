@@ -15,11 +15,9 @@ export default function Main() {
         dark:true
     };
     return (
-        <PaperProvider>
-            <NavigationContainer>
+        <PaperProvider theme={theme}>
             <StatusBar barStyle={'dark-content'} />
-            <App/>
-            </NavigationContainer>
+            <App theme={theme}/>
         </PaperProvider>
     );
 }

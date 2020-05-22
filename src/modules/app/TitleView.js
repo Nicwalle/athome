@@ -2,7 +2,7 @@ import {Text, View} from 'react-native';
 import React from 'react';
 import {IconButton} from 'react-native-paper';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import AddItemSheet from './modules/app/AddItemSheet';
+import AddServiceSheet from './AddServiceSheet';
 
 export class TitleView extends React.Component {
     styles = {
@@ -39,7 +39,7 @@ export class TitleView extends React.Component {
                         style={this.styles.addItemButton}
                     />
                 </View>
-                <AddItemSheet ref={(ref) => this.addItemSheet = ref}/>
+                <AddServiceSheet ref={(ref) => this.addItemSheet = ref}/>
             </>
         )
     }
