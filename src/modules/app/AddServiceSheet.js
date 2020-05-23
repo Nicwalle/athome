@@ -60,24 +60,21 @@ class AddServiceSheet extends React.Component{
 
     render(): React.ReactElement<any> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
         return (
-            <View style={styles.container}>
             <BottomSheet
                 ref={this.bottomSheetRef}
-                snapPoints= {['50%', '10%', 0]}
+                snapPoints= {['80%', 300, 0]}
                 initialSnap={2}
                 renderContent={this.renderInner}
                 renderHeader={this.renderHeader}
             />
-            </View>
         );
     }
 }
 
-const IMAGE_SIZE = 200;
 
 const styles = StyleSheet.create({
     panel: {
-        height: 600,
+        height: 700,
         padding: 20,
     },
     header: {
@@ -95,38 +92,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         backgroundColor: '#FFFFFF40',
         marginBottom: 10,
-    },
-    panelTitle: {
-        fontSize: 27,
-        height: 35,
-    },
-    panelSubtitle: {
-        fontSize: 14,
-        color: 'gray',
-        height: 30,
-        marginBottom: 10,
-    },
-    panelButton: {
-        padding: 20,
-        borderRadius: 10,
-        backgroundColor: '#318bfb',
-        alignItems: 'center',
-        marginVertical: 10,
-    },
-    panelButtonTitle: {
-        fontSize: 17,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-    photo: {
-        width: '100%',
-        height: 225,
-        marginTop: 30,
-    },
-    map: {
-        height: '100%',
-        width: '100%',
-    },
+    }
 });
 
 export default withTheme(AddServiceSheet)
