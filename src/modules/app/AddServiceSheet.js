@@ -2,9 +2,15 @@ import React from 'react';
 import {Text, View, FlatList} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import AddServiceListItem from './AddServiceListItem';
-import {ScrollView} from 'react-native-reanimated';
+import RNBottomActionSheet from 'react-native-bottom-action-sheet';
+import Icon from 'react-native-vector-icons';
 
 export default class AddServiceSheet extends React.Component{
+
+    state = {
+        sheetView: false
+    };
+
     styles = {
         addItemSheet: {
             container: {
@@ -36,29 +42,19 @@ export default class AddServiceSheet extends React.Component{
 
     addItemSheet;
 
-    open = () => this.addItemSheet.open();
+    open = () => this.setState({sheetView: true});
 
     render(): React.ReactElement<any> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
-
+        let facebook = <Icon family={'FontAwesome'} name={'facebook'} color={'#000000'} size={30} />;
+        let instagram = <Icon family={'FontAwesome'} name={'instagram'} color={'#000000'} size={30} />;
         return (
-            <RBSheet
-                ref={ref => {
-                    this.addItemSheet = ref;
-                }}
-                height={600}
-                duration={300}
-                animationType={'fade'}
-                closeOnDragDown={false}
-                customStyles={this.styles.addItemSheet}>
-                <View style={{alignItems: 'center'}}>
-                    <Text>Add a device</Text>
-                </View>
-
-                <FlatList
-                    data={this.mock}
-                    renderItem={({item}) => <AddServiceListItem service={item}/>}
-                    keyExtractor={service => service.name}/>
-            </RBSheet>
+            <RNBottomActionSheet.SheetView visible={this.state.sheetView} title={"Awesome!"} theme={"dark"} onSelection={(index, value) => {
+                this.setState({sheetView: false})
+                console.log("selection: " + index + " " + value);
+            }}>
+                <RNBottomActionSheet.SheetView.Item title={"Facebook"} subTitle={"Facebook Description"} icon={facebook} />
+                <RNBottomActionSheet.SheetView.Item title={"Instagram"} subTitle={"Instagram Description"} icon={instagram} />
+            </RNBottomActionSheet.SheetView>
         );
     }
 }

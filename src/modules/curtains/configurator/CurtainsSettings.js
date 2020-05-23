@@ -1,13 +1,20 @@
 import React from 'react';
-import {Text, TextInput} from 'react-native-paper';
+import {Text, TextInput, withTheme} from 'react-native-paper';
 import {View} from 'react-native';
 import BigSlider from '../../../components/BigSlider';
 import AsyncStorage from '@react-native-community/async-storage';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
-export default class CurtainsSettings extends React.Component {
+class CurtainsSettings extends React.Component {
 
     RBSheet;
+
+    constructor() {
+        super();
+        this.state = {
+            sheetView: true
+        }
+    }
 
     open = () => this.RBSheet.open();
 
@@ -25,11 +32,11 @@ export default class CurtainsSettings extends React.Component {
                     container: {
                         paddingHorizontal:16,
                         borderTopLeftRadius: 24,
-                        borderTopRightRadius: 24
+                        borderTopRightRadius: 24,
+                        backgroundColor: this.props.theme.colors.surface
                     }
                 }}
             >
-
                 <Text>Set current state (without moving curtains)</Text>
                 <View style={{height:80}}>
                     <BigSlider
@@ -101,3 +108,5 @@ export default class CurtainsSettings extends React.Component {
         );
     }
 }
+
+export default withTheme(CurtainsSettings);

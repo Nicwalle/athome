@@ -12,8 +12,9 @@ import {
     View,
     Image,
 } from 'react-native';
+import {withTheme} from 'react-native-paper';
 
-export default class BigSlider extends Component {
+class BigSlider extends Component {
     static defaultProps = {
         value: 0,
         maximumValue: 4000,
@@ -77,7 +78,7 @@ export default class BigSlider extends Component {
         return (
             <View
                 onLayout={this.onLayout}
-                style={[styles.container, this.props.style]}
+                style={[styles.container, this.props.style, {backgroundColor: this.props.theme.colors.surface2}]}
                 {...this.panResponder.panHandlers}>
                 <View style={[styles.track, { flex: unitValue }, this.props.trackStyle]}>
                     {unitValue > 0.4 && this.props.leftImage
@@ -118,7 +119,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgb(241, 242, 247)',
         borderRadius: 16,
         overflow: 'hidden',
         height: 80
@@ -168,3 +168,5 @@ const styles = StyleSheet.create({
 function formatNumber (x) {
     return x.toFixed(1).replace(/\.?0*$/, '')
 }
+
+export default withTheme(BigSlider)

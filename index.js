@@ -12,11 +12,16 @@ import {DefaultTheme, DarkTheme, Provider as PaperProvider} from 'react-native-p
 export default function Main() {
     const theme = {
         ...DarkTheme,
-        dark:true
+        dark:true,
+        colors: {
+            ...DarkTheme.colors,
+            surface: '#1E1E1E',
+            surface2: '#2E2E2E'
+        }
     };
     return (
         <PaperProvider theme={theme}>
-            <StatusBar barStyle={'dark-content'} />
+            <StatusBar barStyle={'light-content'} backgroundColor={theme.colors.background} />
             <App theme={theme}/>
         </PaperProvider>
     );

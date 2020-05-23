@@ -1,5 +1,5 @@
 import React from 'react';
-import {TitleView} from './TitleView';
+import TitleView from './TitleView';
 import {RefreshControl, ScrollView} from 'react-native';
 import {CurtainsModule} from '../curtains/CurtainsModule';
 import {HueModule} from '../hue/HueModule';
