@@ -1,5 +1,6 @@
 import React from 'react';
 import Navigation from './modules/navigation/Navigation';
+import {withTheme} from 'react-native-paper';
 
 class App extends React.Component {
 
@@ -10,4 +11,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default withTheme(App);

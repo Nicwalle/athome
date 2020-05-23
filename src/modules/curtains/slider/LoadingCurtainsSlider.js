@@ -1,15 +1,15 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {ActivityIndicator, Colors} from 'react-native-paper';
+import {ActivityIndicator, Colors, withTheme} from 'react-native-paper';
 
-export class LoadingCurtainsSlider extends React.Component {
+class LoadingCurtainsSlider extends React.Component {
 
     render () {
         return (
             <View
                 onLayout={this.onLayout}
                 style={[styles.container, this.props.style]}>
-                <View style={[styles.track, { flex: 1 }, this.props.trackStyle]}>
+                <View style={[styles.track, { flex: 1 }, this.props.trackStyle, {backgroundColor: this.props.theme.colors.surface2}]}>
                     <Image
                         source={require('../../../../images/window-light.png')}
                         style={{ ...styles.leftImage }}
@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgb(241, 242, 247)',
         borderRadius: 16,
         overflow: 'hidden',
     },
@@ -65,3 +64,5 @@ const styles = StyleSheet.create({
         width: 60
     }
 });
+
+export default withTheme(LoadingCurtainsSlider);

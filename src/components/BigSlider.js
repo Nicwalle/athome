@@ -85,7 +85,7 @@ class BigSlider extends Component {
                         ?
                         <Image
                             source={this.props.leftImage}
-                            style={{ ...styles.leftImage, opacity: (unitValue - 0.4) * 5 }}
+                            style={{ ...styles.leftImage, opacity: (unitValue - 0.4) * 5,  resizeMode: 'contain' }}
                         />
                         :<View style={{width: ((unitValue-0.1)/0.4)*130}}/>
                     }
@@ -103,7 +103,7 @@ class BigSlider extends Component {
                     {unitValue < 0.6 && this.props.rightImage
                         ?<Image
                             source={this.props.rightImage}
-                            style={{ ...styles.rightImage, opacity: (0.6 - unitValue) * 5}}
+                            style={{ ...styles.rightImage, opacity: (0.6 - unitValue) * 5, resizeMode: 'contain'}}
                         />
                         :<View/>
                     }

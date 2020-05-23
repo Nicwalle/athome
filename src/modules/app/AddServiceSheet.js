@@ -1,25 +1,23 @@
 import React from 'react';
-import {Text, View, FlatList} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import AddServiceListItem from './AddServiceListItem';
-import RNBottomActionSheet from 'react-native-bottom-action-sheet';
+import BottomSheet from 'reanimated-bottom-sheet'
 import Icon from 'react-native-vector-icons';
+import {withTheme} from 'react-native-paper';
 
-export default class AddServiceSheet extends React.Component{
+class AddServiceSheet extends React.Component{
+
+    constructor(props) {
+        super(props);
+        this.bottomSheetRef = React.createRef();
+    }
 
     state = {
         sheetView: false
     };
 
-    styles = {
-        addItemSheet: {
-            container: {
-                paddingHorizontal:16,
-                borderTopLeftRadius: 24,
-                borderTopRightRadius: 24
-            }
-        },
-    };
+
 
     mock = [
         {
@@ -40,21 +38,95 @@ export default class AddServiceSheet extends React.Component{
         }
     ];
 
-    addItemSheet;
+    open = () => {
+        this.bottomSheetRef.current.snapTo(1);
+    };
 
-    open = () => this.setState({sheetView: true});
+    renderHeader = () => (
+        <View style={{...styles.header, backgroundColor: this.props.theme.colors.surface}}>
+            <View style={styles.panelHeader}>
+                <View style={styles.panelHandle} />
+            </View>
+        </View>
+    );
+
+    renderInner = () => (
+        <View style={{...styles.panel, backgroundColor: this.props.theme.colors.surface}}>
+            <Text style={{color: this.props.theme.colors.onSurface}}>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aliquid cumque deleniti dolore eos exercitationem id, illum laborum maxime mollitia nobis odio quidem quod repellat reprehenderit sit unde veritatis voluptas.
+            </Text>
+        </View>
+    );
 
     render(): React.ReactElement<any> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
-        let facebook = <Icon family={'FontAwesome'} name={'facebook'} color={'#000000'} size={30} />;
-        let instagram = <Icon family={'FontAwesome'} name={'instagram'} color={'#000000'} size={30} />;
         return (
-            <RNBottomActionSheet.SheetView visible={this.state.sheetView} title={"Awesome!"} theme={"dark"} onSelection={(index, value) => {
-                this.setState({sheetView: false})
-                console.log("selection: " + index + " " + value);
-            }}>
-                <RNBottomActionSheet.SheetView.Item title={"Facebook"} subTitle={"Facebook Description"} icon={facebook} />
-                <RNBottomActionSheet.SheetView.Item title={"Instagram"} subTitle={"Instagram Description"} icon={instagram} />
-            </RNBottomActionSheet.SheetView>
+            <View style={styles.container}>
+            <BottomSheet
+                ref={this.bottomSheetRef}
+                snapPoints= {['50%', '10%', 0]}
+                initialSnap={2}
+                renderContent={this.renderInner}
+                renderHeader={this.renderHeader}
+            />
+            </View>
         );
     }
 }
+
+const IMAGE_SIZE = 200;
+
+const styles = StyleSheet.create({
+    panel: {
+        height: 600,
+        padding: 20,
+    },
+    header: {
+        height:20,
+        paddingTop: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+    },
+    panelHeader: {
+        alignItems: 'center',
+    },
+    panelHandle: {
+        width: 40,
+        height: 6,
+        borderRadius: 4,
+        backgroundColor: '#FFFFFF40',
+        marginBottom: 10,
+    },
+    panelTitle: {
+        fontSize: 27,
+        height: 35,
+    },
+    panelSubtitle: {
+        fontSize: 14,
+        color: 'gray',
+        height: 30,
+        marginBottom: 10,
+    },
+    panelButton: {
+        padding: 20,
+        borderRadius: 10,
+        backgroundColor: '#318bfb',
+        alignItems: 'center',
+        marginVertical: 10,
+    },
+    panelButtonTitle: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: 'white',
+    },
+    photo: {
+        width: '100%',
+        height: 225,
+        marginTop: 30,
+    },
+    map: {
+        height: '100%',
+        width: '100%',
+    },
+});
+
+export default withTheme(AddServiceSheet)
