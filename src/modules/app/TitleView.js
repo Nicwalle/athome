@@ -1,14 +1,14 @@
 import {Text, View} from 'react-native';
 import React from 'react';
 import {IconButton, withTheme} from 'react-native-paper';
-import AddServiceSheet from './AddServiceSheet';
+import AddServiceSheet from './addService/AddServiceSheet';
 
 class TitleView extends React.Component {
     colors;
     constructor(props) {
         super();
-        let {text, surface} = props.theme.colors;
-        this.styles.titleText.color = text;
+        let {onBackground, surface} = props.theme.colors;
+        this.styles.titleText.color = onBackground;
         this.styles.addItemButton.backgroundColor = surface;
     }
     styles = {
@@ -16,12 +16,13 @@ class TitleView extends React.Component {
             marginTop: 24,
             marginHorizontal: 16,
             elevation: 10,
-            flexDirection: 'row',
+            flexDirection: 'row'
         },
         titleText: {
             fontSize: 28,
             fontWeight: '700',
             flex: 1,
+            fontFamily: 'Rubik'
         },
         addItemButton: {
             marginTop: -2,

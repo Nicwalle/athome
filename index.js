@@ -15,8 +15,10 @@ export default function Main() {
         mode:'adaptive',
         colors: {
             ...DarkTheme.colors,
-            surface: '#2E2E2E',
-            surface2: '#3E3E3E'
+            background: '#202125',
+            onBackground: '#EAEAEA',
+            surface: '#37383C',
+            surface2: '#47484d'
         }
     };
     return (
