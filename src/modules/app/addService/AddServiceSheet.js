@@ -1,51 +1,86 @@
 import React from 'react';
-import {Text, View, StyleSheet, FlatList} from 'react-native';
-import RBSheet from 'react-native-raw-bottom-sheet';
+import {Text, View, StyleSheet, FlatList, Dimensions} from 'react-native';
 import AddServiceListItem from './AddServiceListItem';
 import BottomSheet from 'reanimated-bottom-sheet'
-import Icon from 'react-native-vector-icons';
 import {withTheme} from 'react-native-paper';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import firestore from '@react-native-firebase/firestore';
 
 class AddServiceSheet extends React.Component{
 
     constructor(props) {
         super(props);
         this.bottomSheetRef = React.createRef();
-        this.colors = this.props.theme.colors
+        this.colors = this.props.theme.colors;
+        this.fullHeight = Dimensions.get('window').height - getStatusBarHeight(false);
     }
 
-    mock = [
-        {name: "Netatmo", icon: 'netatmo'},
-        {name: "Smart Curtains", icon: 'smart-curtains'},
-        {name: "Philips Hue", icon: 'philips-hue'},
-        {name: "Smart Life", icon: 'smartlife'}
-    ];
+    componentDidMount(): void {
+        this.loadAvailableServices()
+    }
+
+    loadAvailableServices = () => {
+        firestore()
+            .collection('AvailableServices')
+            .get()
+            .then(querySnapshot => {
+                let availableServices = [];
+                querySnapshot.forEach(documentSnapshot => {
+                    availableServices.push({
+                        ...documentSnapshot.data(),
+                        key: documentSnapshot.id
+                    })
+                });
+                this.setState({availableServices})
+            });
+    };
+
+    state = {
+        availableServices: []
+    };
 
     open = () => {
         this.bottomSheetRef.current.snapTo(1);
     };
 
-    renderContent = () => (
-        <View style={{...styles.panel, backgroundColor: this.colors.surface}}>
-            <View style={styles.panelHeader}>
-                <View style={styles.panelHandle} />
+    renderContent = () => {
+        return (
+            <View style={[styles.panel, {
+                backgroundColor: this.colors.surface,
+                height: this.state.availableServices.length * 56
+            }]}>
+                <FlatList
+                    data={this.state.availableServices}
+                    renderItem={({item}) => <AddServiceListItem service={item} color={this.colors.onSurface}/>}
+                    keyExtractor={item => item.key}
+                />
             </View>
-            <FlatList
-                data={this.mock}
-                renderItem={({ item }) => <AddServiceListItem service={item} color={this.colors.onSurface}/>}
-                keyExtractor={item => item.name}
-            />
+        );
+    }
+
+    renderHeader = () => (
+        <View style={[styles.panelHeader, {backgroundColor: this.colors.surface}]}>
+            <View style={styles.panelHandle} />
+            <Text style={[styles.panelHeaderTitle, {color: this.colors.onSurface}]}>Select service</Text>
         </View>
     );
 
-    render(): React.ReactElement<any> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
+    render() {
+        let maxHeight = Math.min(this.fullHeight, (this.state.availableServices.length + 1) * 56);
+        let fortyPercent = this.fullHeight * .4;
+        let snapPoints;
+        if (fortyPercent >= maxHeight) {
+            snapPoints = [maxHeight, maxHeight, 0, -10000];
+        } else {
+            snapPoints = [maxHeight, fortyPercent, 0, -10000];
+        }
         return (
             <BottomSheet
                 ref={this.bottomSheetRef}
-                snapPoints= {['80%', 300, 0]}
-                initialSnap={2}
+                snapPoints= {snapPoints}
+                initialSnap={3}
                 renderContent={this.renderContent}
-                borderRadius={30}
+                renderHeader={this.renderHeader}
             />
         );
     }
@@ -54,27 +89,26 @@ class AddServiceSheet extends React.Component{
 
 const styles = StyleSheet.create({
     panel: {
-        height: 700,
-        paddingTop: 16,
     },
-    header: {
-        height:20,
-        paddingTop: 20,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
+    panelHeaderTitle: {
+        fontSize:16,
+        marginBottom: 8,
+        marginTop: 8,
     },
     panelHeader: {
+        backgroundColor: 'black',
         alignItems: 'center',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        minHeight:30,
     },
     panelHandle: {
         width: 40,
         height: 6,
         borderRadius: 4,
         backgroundColor: '#FFFFFF40',
-        marginBottom: 10,
+        marginTop: 12,
     },
-    listItem: {
-    }
 });
 
 export default withTheme(AddServiceSheet)

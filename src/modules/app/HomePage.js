@@ -3,7 +3,7 @@ import TitleView from './TitleView';
 import {RefreshControl, ScrollView} from 'react-native';
 import {CurtainsModule} from '../curtains/CurtainsModule';
 import {HueModule} from '../hue/HueModule';
-export default class Home extends React.Component{
+export default class HomePage extends React.Component{
 
     constructor() {
         super();

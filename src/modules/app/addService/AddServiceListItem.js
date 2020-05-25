@@ -4,34 +4,31 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ServiceIcon from './ServiceIcon';
 import {TouchableRipple} from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
-class AddServiceListItem extends React.Component{
-    constructor(props) {
-        super(props);
-        styles.title = {
-            ...styles.title,
-            color: this.props.color
-        };
-        styles.description = {
-            ...styles.description,
-            color: this.props.color,
-            opacity: 0.5
-        };
-    }
+function AddServiceListItem ({service, color}) {
+    const navigation = useNavigation();
+    styles.title = {
+        ...styles.title,
+        color
+    };
+    styles.description = {
+        ...styles.description,
+        color,
+        opacity: 0.5
+    };
 
-    render() {
-        return (
-            <TouchableRipple onPress={() => console.log("Clicked", this.props.service.name)}>
+    return (
+        <TouchableRipple onPress={() => navigation.navigate(service.configScreen)}>
             <View style={styles.itemView}>
-                <ServiceIcon name={this.props.service.icon} color={this.props.color} size={32}/>
+                <ServiceIcon name={service.icon} color={color} size={32}/>
                 <View style={styles.textView}>
-                    <Text style={styles.title}>{this.props.service.name}</Text>
-                    <Text style={styles.description}>{this.props.service.name}</Text>
+                    <Text style={styles.title}>{service.name}</Text>
+                    <Text style={styles.description}>{service.description || service.name}</Text>
                 </View>
             </View>
-            </TouchableRipple>
-        );
-    }
+        </TouchableRipple>
+    );
 }
 
 const styles = StyleSheet.create({

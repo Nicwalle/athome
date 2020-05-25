@@ -15,14 +15,12 @@ class TitleView extends React.Component {
         titleView: {
             marginTop: 24,
             marginHorizontal: 16,
-            elevation: 10,
             flexDirection: 'row'
         },
         titleText: {
             fontSize: 28,
-            fontWeight: '700',
+            fontWeight: 'bold',
             flex: 1,
-            fontFamily: 'Rubik'
         },
         addItemButton: {
             marginTop: -2,
