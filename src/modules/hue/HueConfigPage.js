@@ -7,8 +7,8 @@ import ProgressStep from '../../components/ProgressSteps/ProgressStep';
 import ProgressSteps from '../../components/ProgressSteps/ProgressSteps';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {discoverBridge} from './api/HueAPI';
-import TouchableRipple from 'react-native-paper/src/components/TouchableRipple/index';
+import {discoverBridge, HueAPI} from './api/HueAPI';
+import {add} from 'react-native-reanimated';
 
 class HueConfigPage extends React.Component{
 
@@ -27,45 +27,62 @@ class HueConfigPage extends React.Component{
     }
 
     findBridge = () => {
+        this.setState({bridgeFound: false});
         discoverBridge()
             .then(bridges => {
                 if (bridges.length === 0) {
-                    this.setState({bridgeDiscoveryError:true})
-                } else {
-
+                    this.setState({bridgeDiscoveryError:true});
+                    return null;
                 }
+                return `https://${bridges[0].internalipaddress}/api`;
+            })
+            .then(address => {
+                this.setState({
+                    bridgeDiscoveryError: false,
+                    bridgeFound: true,
+                    bridgeAddress: address
+                });
+                return new HueAPI(address);
+            }).then(hueAPI => {
+                hueAPI.createUser('Athome', 'Oneplus A5010'); // TODO : Get device name
             })
     };
 
     renderFindBridgeStep = () => {
+        const bridgeWidth = Dimensions.get('window').width * .8;
+        const {width, height} = Image.resolveAssetSource(HueBridge);
+
+        const bridgeFound = (<>
+            <Image source={HueBridge} style={{width:bridgeWidth, height: (height/width) * bridgeWidth}}/>
+            <Text style={{marginTop: 32, fontSize: 24, textAlign: 'center'}}>Press the big button on the Hue bridge</Text>
+        </>);
+
+        const lookingForBridge = (<>
+            <ActivityIndicator animating={true} color={this.colors.onBackground} size={'large'} />
+            <Text style={{marginTop: 32, fontSize: 24, textAlign: 'center'}}>Looking for your bridge on the network</Text>
+        </>);
+
+        const noBridgeFound = (<>
+            <Icon name={'access-point-network-off'} size={96} color={this.colors.onBackground}/>
+            <Text style={{marginTop: 32, fontSize: 16, textAlign: 'center', width:'80%'}}>Could not find your bridge, make sure you are connected to the right network</Text>
+            <Button icon="refresh" mode="text" onPress={() => this.findBridge()} style={{marginTop: 36}}>
+                Retry
+            </Button>
+        </>);
+
         return (
             <>
                 {this.state.bridgeFound
-                    ? (<>
-                        <Image source={HueBridge} style={{width:bridgeWidth, height: (height/width) * bridgeWidth}}/>
-                        <Text style={{marginTop: 32, fontSize: 24, textAlign: 'center'}}>Press the big button on the Hue bridge</Text>
-                    </>)
-                    :(<>
-                        {this.state.bridgeDiscoveryError
-                            ? <Icon name={'emoticon-cry-outline'} size={96}/>
-                            : <ActivityIndicator animating={true} color={Colors.white} size={'large'} />
-                        }
-                        <Text style={{marginTop: 32, fontSize: 24, textAlign: 'center'}}>Looking for your bridge on the network</Text>
-                        {this.state.bridgeDiscoveryError
-                            ?   <Button icon="refresh" mode="text" onPress={() => this.findBridge()}>
-                                Retry
-                            </Button>
-                            : <></>
-                        }
-                    </>)}
+                    ? bridgeFound
+                    : this.state.bridgeDiscoveryError
+                    ? noBridgeFound
+                    : lookingForBridge
+                }
             </>
         )
     };
 
     render () {
-        const bridgeWidth = Dimensions.get('window').width * .8;
-        const {width, height} = Image.resolveAssetSource(HueBridge);
-
         return (
             <>
                 <View style={styles.titleView}>
