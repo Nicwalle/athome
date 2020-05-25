@@ -17,7 +17,7 @@
     "@react-native-firebase/firestore": "^7.1.0",
     "@react-navigation/native": "^5.4.2",
     "@react-navigation/stack": "^5.3.9",
-    "node-hue-api": "^4.0.6",
+    "prop-types": "^15.7.2",
     "react": "16.9.0",
     "react-native": "^0.62.2",
     "react-native-big-slider": "^0.1.1",
