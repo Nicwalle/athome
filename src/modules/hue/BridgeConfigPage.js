@@ -124,7 +124,9 @@ class BridgeConfigPage extends React.Component{
 
         const noBridgeFound = (<>
             <Icon name={'access-point-network-off'} size={96} color={this.colors.onBackground}/>
-            <Text style={{marginTop: 32, fontSize: 16, textAlign: 'center', width:'80%'}}>Could not find your bridge, make sure you are connected to the right network</Text>
+            <Text style={{marginTop: 32, fontSize: 16, textAlign: 'center', width:'80%'}}>
+                Could not find your bridge, make sure you are connected to the right network
+            </Text>
             <Button icon="refresh" mode="outlined" onPress={() => this.discoverBridge()} style={{marginTop: 36}}>
                 Retry
             </Button>
@@ -145,7 +147,14 @@ class BridgeConfigPage extends React.Component{
     renderConfigurationDone = () => (<>
         <Image source={LightBulb} style={{height:300, aspectRatio: 1}}/>
         <Text style={{marginTop: 32, fontSize: 24, textAlign: 'center'}}>All set</Text>
-        <Button icon="plus" mode="outlined" onPress={() => this.props.navigation.navigate('HueCreateWidgetListPage')} style={{marginTop: 36}}>
+        <Button
+            icon="plus"
+            mode="outlined"
+            style={{marginTop: 36}}
+            onPress={() => this.props.navigation.navigate('HueCreateWidgetListPage', {
+                apiAddress: this.state.bridgeAddress,
+                username: this.state.username
+            })} >
             Configure widgets
         </Button>
     </>);

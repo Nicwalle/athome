@@ -1,15 +1,13 @@
 import React from 'react';
 import {Text, withTheme, ActivityIndicator, Colors, Button, IconButton} from 'react-native-paper';
-import {StyleSheet, View, Image, Dimensions} from 'react-native';
-import HueBridge from '../../../assets/images/hue-bridge.png'
-import LightBulb from '../../../assets/images/light-bulb.png'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {discoverBridge, HueAPI} from './api/HueAPI';
+import {StyleSheet, View, Image, Dimensions, FlatList} from 'react-native';
+import {HueAPI} from './api/HueAPI';
 
-import {getUser, getOrAuthUser} from '../../utils/Authentication'
-import {getFirestoreBridge, saveBridgeInFirestore, deleteBridgeFromFirestore} from './utils/FireStore'
+import {getUser} from '../../utils/Authentication'
+import {} from './utils/FireStore'
+import firestore from '@react-native-firebase/firestore';
+import AddServiceListItem from '../app/addService/AddServiceListItem';
 
-import { getDeviceName } from 'react-native-device-info';
 
 
 class HueCreateWidgetListPage extends React.Component{
@@ -23,7 +21,24 @@ class HueCreateWidgetListPage extends React.Component{
             bridgeDiscoveryError: false,
             username: null
         };
-        this.hueAPI = null;
+        let {apiAddress, username} = props.route.params;
+        this.hueAPI = new HueAPI(apiAddress, username);
+    }
+
+    componentDidMount(): void {
+        firestore()
+            .collection('Services').doc('philips-hue').collection('Widgets')
+            .get()
+            .then(querySnapshot => {
+                let widgets = [];
+                querySnapshot.forEach(documentSnapshot => {
+                    widgets.push({
+                        ...documentSnapshot.data(),
+                        key: documentSnapshot.id
+                    })
+                });
+                this.setState({widgets})
+            });
     }
 
     render () {
@@ -38,6 +53,11 @@ class HueCreateWidgetListPage extends React.Component{
                     />
                     <Text style={[styles.titleText, {color: this.colors.onBackground}]}>Select widget</Text>
                 </View>
+                <FlatList
+                    data={this.state.widgets}
+                    renderItem={({item}) => <AddServiceListItem service={item} color={this.colors.onSurface}/>}
+                    keyExtractor={item => item.key}
+                />
             </>
         );
     }
