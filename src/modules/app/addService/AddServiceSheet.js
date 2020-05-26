@@ -39,9 +39,9 @@ class AddServiceSheet extends React.Component{
         availableServices: []
     };
 
-    open = () => {
-        this.bottomSheetRef.current.snapTo(1);
-    };
+    open = () => this.bottomSheetRef.current.snapTo(1);
+
+    close = () => this.bottomSheetRef.current.snapTo(2);
 
     renderContent = () => {
         return (
@@ -51,7 +51,7 @@ class AddServiceSheet extends React.Component{
             }]}>
                 <FlatList
                     data={this.state.availableServices}
-                    renderItem={({item}) => <AddServiceListItem service={item} color={this.colors.onSurface}/>}
+                    renderItem={({item}) => <AddServiceListItem service={item} color={this.colors.onSurface} closeSheet={this.close}/>}
                     keyExtractor={item => item.key}
                 />
             </View>

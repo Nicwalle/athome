@@ -11,7 +11,7 @@ class LoadingCurtainsSlider extends React.Component {
                 style={[styles.container, this.props.style]}>
                 <View style={[styles.track, { flex: 1 }, this.props.trackStyle, {backgroundColor: this.props.theme.colors.surface2}]}>
                     <Image
-                        source={require('../../../../images/window-light.png')}
+                        source={require('../../../../assets/images/window-light.png')}
                         style={{ ...styles.leftImage }}
                     />
                     <View style={styles.trackLabel}>

@@ -2,11 +2,11 @@ import React from 'react';
 import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import ServiceIcon from './ServiceIcon';
+import ServiceIcon from '../../../components/customIcons/ServiceIcon';
 import {TouchableRipple} from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
-function AddServiceListItem ({service, color}) {
+function AddServiceListItem ({service, color, closeSheet}) {
     const navigation = useNavigation();
     styles.title = {
         ...styles.title,
@@ -19,7 +19,10 @@ function AddServiceListItem ({service, color}) {
     };
 
     return (
-        <TouchableRipple onPress={() => navigation.navigate(service.configScreen)}>
+        <TouchableRipple onPress={() => {
+            navigation.navigate(service.configScreen);
+            closeSheet();
+        }}>
             <View style={styles.itemView}>
                 <ServiceIcon name={service.icon} color={color} size={32}/>
                 <View style={styles.textView}>

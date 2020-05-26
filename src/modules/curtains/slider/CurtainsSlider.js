@@ -1,8 +1,8 @@
 import BigSlider from '../../../components/BigSlider';
 import React from 'react';
 import LoadingCurtainsSlider from './LoadingCurtainsSlider';
-import WindowLight from '../../../../images/window-light.png';
-import WindowColor from '../../../../images/curtains.png';
+import WindowLight from '../../../../assets/images/window-light.png';
+import WindowColor from '../../../../assets/images/curtains.png';
 
 export default class CurtainsSlider extends React.Component {
     state = {

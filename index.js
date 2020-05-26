@@ -18,9 +18,11 @@ export default function Main() {
             background: '#202125',
             onBackground: '#EAEAEA',
             surface: '#37383C',
-            surface2: '#47484d'
+            surface2: '#47484d',
+            primary: '#FFC107'
         }
     };
+
     return (
         <PaperProvider theme={theme}>
             <StatusBar barStyle={'light-content'} backgroundColor={theme.colors.background} />

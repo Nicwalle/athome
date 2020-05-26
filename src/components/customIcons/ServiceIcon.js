@@ -4,7 +4,7 @@
  */
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icoMoonConfig from './serviceIcons.json';
+import icoMoonConfig from './selection.json';
 
 const iconSet = createIconSetFromIcoMoon(icoMoonConfig, 'IcoMoon', 'icomoon.ttf');
 
