@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {discoverBridge, HueAPI} from './api/HueAPI';
 
 import {getUser, getOrAuthUser} from '../../utils/Authentication'
-import {getFirestoreBridge, saveBridgeInFirestore, deleteBridgeFromFirestore} from './utils/FireStore'
+import {getFirestoreBridges, saveBridgeInFirestore, deleteBridgeFromFirestore} from './utils/FireStore'
 
 import { getDeviceName } from 'react-native-device-info';
 
@@ -30,13 +30,13 @@ class BridgeConfigPage extends React.Component{
         getOrAuthUser()
             .then(user => {
                 console.log("Got User", user.uid);
-                return getFirestoreBridge(user.uid);
+                return getFirestoreBridges(user.uid);
             })
             .then(result => {
                 console.log("Fetched firestore for bridge");
-                if (result.exists) {
-                    console.log("found one");
-                    let {apiAddress, username} = result.data();
+                if (result.length > 0) {
+                    let {apiAddress, username} = result[0].data();
+                    let bridgeID = result[0].id;
                     this.hueAPI = new HueAPI(apiAddress, username);
                     this.hueAPI.isBridgeAndUserValid()
                         .then(isValid => {
@@ -49,13 +49,13 @@ class BridgeConfigPage extends React.Component{
                                 });
                             } else {
                                 console.log("which is invalid");
-                                deleteBridgeFromFirestore(getUser().uid).done();
+                                deleteBridgeFromFirestore(getUser().uid, bridgeID).done();
                                 this.discoverBridge().done()
                             }
                         })
 
                 } else {
-                    console.log("did not find one or was invalid");
+                    console.log("did not find one");
                     this.discoverBridge().done()
                 }
 
@@ -78,7 +78,8 @@ class BridgeConfigPage extends React.Component{
                 return saveBridgeInFirestore(this.hueAPI.baseAddress, this.hueAPI.username, getUser().uid)
             })
             .catch(_ => {
-                console.log("Failed")
+                console.log("Need to click butting and retry")
+
             });
     };
 
@@ -145,8 +146,11 @@ class BridgeConfigPage extends React.Component{
     };
 
     renderConfigurationDone = () => (<>
+        {this.props.navigation.navigate('WidgetListPage', {
+            serviceID: 'philips-hue'
+        })}
         <Image source={LightBulb} style={{height:300, aspectRatio: 1}}/>
-        <Text style={{marginTop: 32, fontSize: 24, textAlign: 'center'}}>All set</Text>
+        <Text style={{marginTop: 32, fontSize: 24, textAlign: 'center'}}>All set and ready to use</Text>
         <Button
             icon="plus"
             mode="outlined"
@@ -166,9 +170,10 @@ class BridgeConfigPage extends React.Component{
                     <Text style={[styles.titleText, {color: this.colors.onBackground}]}>Configure your Hue Devices</Text>
                 </View>
                 <View style={{ alignItems: 'center', flex:1, justifyContent:'center'}}>
-                    {this.state.username
-                        ? this.renderConfigurationDone()
-                        : this.renderFindBridgeStep()}
+                    {!this.state.username
+                        ? this.renderFindBridgeStep()
+                        : this.renderConfigurationDone()
+                    }
                 </View>
             </>
         );

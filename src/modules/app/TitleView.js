@@ -42,7 +42,7 @@ class TitleView extends React.Component {
                         style={[this.styles.addItemButton, {backgroundColor: this.props.theme.colors.surface}]}
                     />
                 </View>
-                <AddServiceSheet ref={(ref) => this.addItemSheet = ref}/>
+                <AddServiceSheet ref={(ref) => this.addItemSheet = ref} navigation={this.props.navigation}/>
             </>
         )
     }

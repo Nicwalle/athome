@@ -25,7 +25,7 @@ export default class HomePage extends React.Component{
     render () {
         return (
             <>
-                <TitleView/>
+                <TitleView navigation={this.props.navigation}/>
                 <ScrollView
                             style={{flex: 1, flexDirection:'column', margin:16}}
                             refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}>

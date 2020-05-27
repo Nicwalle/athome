@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View, StyleSheet, FlatList, Dimensions} from 'react-native';
-import AddServiceListItem from './AddServiceListItem';
+import ListItemWithIcon from '../../../components/ListItemWithIcon';
 import BottomSheet from 'reanimated-bottom-sheet'
 import {withTheme} from 'react-native-paper';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
@@ -21,9 +21,8 @@ class AddServiceSheet extends React.Component{
 
     loadAvailableServices = () => {
         firestore()
-            .collection('AvailableServices')
-            .get()
-            .then(querySnapshot => {
+            .collection('Services')
+            .onSnapshot(querySnapshot => {
                 let availableServices = [];
                 querySnapshot.forEach(documentSnapshot => {
                     availableServices.push({
@@ -43,6 +42,22 @@ class AddServiceSheet extends React.Component{
 
     close = () => this.bottomSheetRef.current.snapTo(2);
 
+    renderItem = (item) => (
+
+            <ListItemWithIcon
+                title={item.name}
+                description={item.description}
+                icon={item.icon}
+                color={this.colors.onSurface}
+                onClick={() => {
+                    this.props.navigation.navigate(item.configPage || 'WidgetListPage', {
+                        serviceID: item.key
+                    });
+                    this.close();
+                }}
+            />
+        );
+
     renderContent = () => {
         return (
             <View style={[styles.panel, {
@@ -51,7 +66,9 @@ class AddServiceSheet extends React.Component{
             }]}>
                 <FlatList
                     data={this.state.availableServices}
-                    renderItem={({item}) => <AddServiceListItem service={item} color={this.colors.onSurface} closeSheet={this.close}/>}
+                    renderItem={
+                        ({item}) => this.renderItem(item)
+                    }
                     keyExtractor={item => item.key}
                 />
             </View>
