@@ -3,18 +3,12 @@ import {withTheme, IconButton, TextInput, Text, TouchableRipple} from 'react-nat
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {} from './utils/FireStore';
 import TitleViewWithBackButton from '../app/TitleViewWithBackButton';
-import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MockUnitWidget from '../../components/MockUnitWidget';
 import ToggleWidget from '../../components/ToggleWidget';
 import IncrementInput from '../../components/IncrementInput';
 import GradientSelectorButton from '../../components/GradientSelectorButton';
-import BottomSheet from 'reanimated-bottom-sheet';
-import {getStatusBarHeight} from "react-native-status-bar-height";
 import GradientSelectorBottomSheet from '../../components/GradientSelectorBottomSheet';
-
-const {Dimensions} = require('react-native');
-
+console.log(GradientSelectorBottomSheet);
 class CreateHueToggleWidget extends React.Component{
 
     constructor(props) {
@@ -29,8 +23,10 @@ class CreateHueToggleWidget extends React.Component{
                 isOn: true,
                 width: 1
             },
-            showGradientSelectorSheet: false
+            showGradientSelectorSheet: false,
+            showIconSelectorSheet: false
         };
+        this.gradientSelectorBottomSheet = React.createRef();
     }
 
     updateWidget = (newState) => this.setState({
@@ -69,15 +65,16 @@ class CreateHueToggleWidget extends React.Component{
                     <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:16}}>
                         <Text style={{fontSize:18}}>Button color:</Text>
                         <GradientSelectorButton
-                            onPress={() => this.setState({showGradientSelectorSheet:true})}
+                            onPress={() => this.gradientSelectorBottomSheet.current.open()}
                             color={this.state.widget.color}
                         />
                     </View>
                 </ScrollView>
                 <GradientSelectorBottomSheet
-                    visible={this.state.showGradientSelectorSheet}
                     onColor={newColor => this.updateWidget({color:newColor})}
                     color={this.state.widget.color}
+                    ref={this.gradientSelectorBottomSheet}
+                    data={Object.keys(this.gradients)}
                 />
             </>
         );
