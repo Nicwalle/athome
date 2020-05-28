@@ -20,6 +20,22 @@ export default function ToggleWidget(props) {
         gradient = gradients[color]
     }
 
+    function renderName() {
+        if (name === '') return <></>;
+        const style = {
+            color: colors.onSurface
+        };
+
+        if (width>1) {
+            style['fontSize'] = 18;
+            style['marginLeft'] = 8;
+        }
+
+        return <Text style={style}>{name}</Text>
+
+
+    }
+
     return (
         <TouchableOpacity
             onPress={() => setToggle(!toggle)}
@@ -37,15 +53,16 @@ export default function ToggleWidget(props) {
                     borderRadius:16,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    flex: 1
+                    flex: 1,
+                    flexDirection:width>1?'row':'column'
                 }}
             >
                 <Icon
                     name={icon || 'power'}
                     color={'white'}
-                    size={32}
+                    size={width>1?36:32}
                 />
-                {name !== '' ? <Text style={{color: colors.onSurface}}>{name}</Text>:<></>}
+                {renderName()}
             </LinearGradient>
         </TouchableOpacity>
     );
