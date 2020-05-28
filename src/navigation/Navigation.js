@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack'
 import HomePage from '../modules/app/HomePage';
 import BridgeConfigPage from '../modules/hue/BridgeConfigPage';
 import WidgetListPage from '../modules/hue/WidgetListPage';
+import CreateHueToggleWidget from '../modules/hue/CreateHueToggleWidget';
 
 export default class Navigation extends React.Component{
     render(): React.ReactElement<any> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
@@ -17,6 +18,9 @@ export default class Navigation extends React.Component{
                         headerShown: false
                     }}/>
                     <Stack.Screen name={"WidgetListPage"} component={WidgetListPage} options={{
+                        headerShown: false
+                    }}/>
+                    <Stack.Screen name={"CreateHueToggleWidget"} component={CreateHueToggleWidget} options={{
                         headerShown: false
                     }}/>
                 </Stack.Navigator>

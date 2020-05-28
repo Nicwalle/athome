@@ -1,14 +1,12 @@
 import React from 'react';
-import {Text, withTheme, ActivityIndicator, Colors, Button, IconButton} from 'react-native-paper';
+import {Text, withTheme, Button, TextInput} from 'react-native-paper';
 import {StyleSheet, View, Image, Dimensions, FlatList} from 'react-native';
-import {HueAPI} from './api/HueAPI';
 
-import {getUser} from '../../utils/Authentication'
 import {} from './utils/FireStore'
 import firestore from '@react-native-firebase/firestore';
 import ListItemWithIcon from '../../components/ListItemWithIcon';
-import HueBridge from '../../../assets/images/hue-bridge.png';
 import Empty from '../../../assets/images/empty.png'
+import TitleViewWithBackButton from '../app/TitleViewWithBackButton';
 
 
 
@@ -51,8 +49,7 @@ class WidgetListPage extends React.Component{
             icon={item.icon}
             color={this.colors.onSurface}
             onClick={() => {
-                this.props.navigation.navigate(item.configScreen);
-                this.close();
+                this.props.navigation.navigate(item.creationPage);
             }}
         />
     );
@@ -74,15 +71,7 @@ class WidgetListPage extends React.Component{
     render () {
         return (
             <>
-                <View style={styles.titleView}>
-                    <IconButton
-                        icon={'arrow-left'}
-                        size={28}
-                        onPress={() => this.props.navigation.popToTop()}
-                        style={[styles.goBackButton]}
-                    />
-                    <Text style={[styles.titleText, {color: this.colors.onBackground}]}>Select widget type</Text>
-                </View>
+                <TitleViewWithBackButton title={'Select widget type'} onPress={() => this.props.navigation.popToTop()}/>
                 <FlatList
                         data={this.state.widgets}
                         renderItem={({item}) => this.renderItem(item)}
@@ -91,28 +80,9 @@ class WidgetListPage extends React.Component{
                         style={{marginTop: 8}}
                         contentContainerStyle={{flexGrow:1}}
                     />
-
             </>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    titleView: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 8
-    },
-    titleText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        flex:1
-    },
-    goBackButton: {
-        position: 'absolute',
-        zIndex: 5
-    }
-});
 
 export default withTheme(WidgetListPage)
