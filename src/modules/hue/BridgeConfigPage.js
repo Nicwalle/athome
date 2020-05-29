@@ -29,11 +29,9 @@ class BridgeConfigPage extends React.Component{
     componentDidMount(): void {
         getOrAuthUser()
             .then(user => {
-                console.log("Got User", user.uid);
                 return getFirestoreBridges(user.uid);
             })
             .then(result => {
-                console.log("Fetched firestore for bridge");
                 if (result.length > 0) {
                     let {apiAddress, username} = result[0].data();
                     let bridgeID = result[0].id;
@@ -41,21 +39,18 @@ class BridgeConfigPage extends React.Component{
                     this.hueAPI.isBridgeAndUserValid()
                         .then(isValid => {
                             if (isValid) {
-                                console.log("which is valid");
                                 this.setState({
                                     bridgeFound: true,
                                     bridgeAddress: apiAddress,
                                     username: username
                                 });
                             } else {
-                                console.log("which is invalid");
                                 deleteBridgeFromFirestore(getUser().uid, bridgeID).done();
                                 this.discoverBridge().done()
                             }
                         })
 
                 } else {
-                    console.log("did not find one");
                     this.discoverBridge().done()
                 }
 
@@ -66,21 +61,15 @@ class BridgeConfigPage extends React.Component{
     createHueUser = async () => {
         return getDeviceName()
             .then(deviceName => {
-                console.log("Creating user with device name", deviceName);
                 return this.hueAPI.createUser('Athome', deviceName)
             })
             .then(username => {
-                console.log("Setting username state", username)
                 this.setState({username});
             })
             .then(_ => {
-                console.log("Saving bridge in firestore");
                 return saveBridgeInFirestore(this.hueAPI.baseAddress, this.hueAPI.username, getUser().uid)
             })
-            .catch(_ => {
-                console.log("Need to click butting and retry")
-
-            });
+            .catch(_ => null);
     };
 
     discoverBridge = () => {
@@ -100,7 +89,6 @@ class BridgeConfigPage extends React.Component{
                 return address;
             })
             .then(address => {
-                console.log("discovered bridge at address", address);
                 this.hueAPI = new HueAPI(address);
             })
             .then(_ => {
@@ -147,7 +135,11 @@ class BridgeConfigPage extends React.Component{
 
     renderConfigurationDone = () => (<>
         {this.props.navigation.navigate('WidgetListPage', {
-            serviceID: 'philips-hue'
+            serviceID: 'philips-hue',
+            widgetCreationParams: {
+                apiAddress: this.state.bridgeAddress,
+                username: this.state.username
+            }
         })}
         <Image source={LightBulb} style={{height:300, aspectRatio: 1}}/>
         <Text style={{marginTop: 32, fontSize: 24, textAlign: 'center'}}>All set and ready to use</Text>

@@ -1,16 +1,13 @@
-import React, {useState, useRef} from 'react';
-import {Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
+import React from 'react';
+import {Dimensions, TouchableOpacity, View} from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
 import {withTheme} from 'react-native-paper';
 import SelectorBottomSheet from './SelectorBottomSheet';
-
 
 class GradientSelectorBottomSheet extends SelectorBottomSheet {
 
     constructor(props) {
         const {gradients} = props.theme;
-        console.log(gradients)
-        Object.keys(gradients)
         super(props);
         this.gradients = gradients;
     }
@@ -25,7 +22,7 @@ class GradientSelectorBottomSheet extends SelectorBottomSheet {
                 maxWidth: Dimensions.get('window').width / 4 - 24,
             }}>
                 <TouchableOpacity
-                    onPress={() => this.props.onColor(gradient)}
+                    onPress={() => this.props.onItem(gradient)}
                     style={{
                         width: 56,
                         height:56,
@@ -36,7 +33,7 @@ class GradientSelectorBottomSheet extends SelectorBottomSheet {
                         end={{x:1, y:1}}
                         style={{
                             flex: 1,
-                            borderRadius:this.props.color===gradient ? 12 : 28,
+                            borderRadius:this.props.currentItem===gradient ? 12 : 28,
                         }}
                     />
                 </TouchableOpacity>

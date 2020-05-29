@@ -17,6 +17,7 @@ export default function Main() {
             ...DarkTheme.colors,
             background: '#202125',
             onBackground: '#EAEAEA',
+            onSurface: '#EAEAEA',
             surface: '#37383C',
             surface2: '#47484d',
             primary: '#FFC107'

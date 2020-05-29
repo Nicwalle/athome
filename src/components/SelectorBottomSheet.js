@@ -1,10 +1,7 @@
-import React, {useState, useRef} from 'react';
-import {Dimensions, StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
-import LinearGradient from "react-native-linear-gradient";
-import {useTheme, withTheme} from 'react-native-paper';
+import React from 'react';
+import {Dimensions, StyleSheet, Text, View, FlatList} from 'react-native';
 import {getStatusBarHeight} from "react-native-status-bar-height";
 import BottomSheet from 'reanimated-bottom-sheet'
-
 
 class SelectorBottomSheet extends React.Component {
 
@@ -17,18 +14,25 @@ class SelectorBottomSheet extends React.Component {
         this.bottomSheetRef = React.createRef();
         this.numRows = Math.ceil(this.data.length/4);
         this.rowHeight = 72;
+        this.sheetTitle = 'Select';
+        this.fullHeight = Dimensions.get('window').height - getStatusBarHeight(false);
+        this.snapPoints = null;
     }
 
-    open = () => this.bottomSheetRef.current.snapTo(0);
+    open = () => {
+        this.props.closeAll(this);
+        this.bottomSheetRef.current.snapTo(1);
+    };
 
-    close = () => this.bottomSheetRef.current.snapTo(2);
+    close = () => {
+        this.bottomSheetRef.current.snapTo(3);
+    };
 
     renderItem;
 
     renderContent = () => (
-        <View style={{backgroundColor: this.colors.surface, paddingHorizontal:16}}>
+        <View style={{backgroundColor: this.colors.surface, paddingHorizontal:16, height: this.numRows * this.rowHeight}}>
             <FlatList
-                horizontal={false}
                 numColumns={4}
                 data={this.data}
                 renderItem={({item})=>this.renderItem(item)}
@@ -38,9 +42,17 @@ class SelectorBottomSheet extends React.Component {
     );
 
     getSnapPoints = () => {
-        const fullHeight = Dimensions.get('window').height - getStatusBarHeight(false);
-        let maxHeight = Math.min(fullHeight, (this.numRows) * this.rowHeight + 56);
-        return [maxHeight, 0, -10000];
+        if (this.snapPoint) return this.snapPoints;
+        let maxHeight = Math.min(this.fullHeight, (this.numRows) * this.rowHeight + 56);
+        let intermediate = this.fullHeight * .4;
+        let snapPoints;
+        if (intermediate >= maxHeight) {
+            snapPoints = [maxHeight, maxHeight, 0, -10000];
+        } else {
+            snapPoints = [maxHeight, intermediate, 0, -10000];
+        }
+        this.snapPoints= snapPoints;
+        return snapPoints;
     };
 
     render() {
@@ -48,12 +60,12 @@ class SelectorBottomSheet extends React.Component {
             <BottomSheet
                 ref={this.bottomSheetRef}
                 snapPoints={this.getSnapPoints()}
-                initialSnap={2}
+                initialSnap={3}
                 renderContent={this.renderContent}
                 renderHeader={() => (
                     <View style={[styles.panelHeader, {backgroundColor: this.colors.surface}]}>
                         <View style={styles.panelHandle}/>
-                        <Text style={[styles.panelHeaderTitle, {color: this.colors.onSurface}]}>Select color</Text>
+                        <Text style={[styles.panelHeaderTitle, {color: this.colors.onSurface}]}>{this.sheetTitle}</Text>
                     </View>
                 )}
                 onCloseEnd={() => this.close()}

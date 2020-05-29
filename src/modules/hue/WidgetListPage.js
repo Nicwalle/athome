@@ -12,17 +12,14 @@ import TitleViewWithBackButton from '../app/TitleViewWithBackButton';
 
 class WidgetListPage extends React.Component{
 
+    state = {};
+
     constructor(props) {
         super(props);
         this.colors = props.theme.colors;
-        this.state = {
-            bridgeFound: false,
-            bridgeAddress: null,
-            bridgeDiscoveryError: false,
-            username: null
-        };
         let {serviceID} = props.route.params;
-        this.serviceID = serviceID
+        this.serviceID = serviceID;
+        this.widgetCreationParams = props.route.params.widgetCreationParams || {};
     }
 
     componentDidMount(): void {
@@ -49,7 +46,7 @@ class WidgetListPage extends React.Component{
             icon={item.icon}
             color={this.colors.onSurface}
             onClick={() => {
-                this.props.navigation.navigate(item.creationPage);
+                this.props.navigation.navigate(item.creationPage, this.widgetCreationParams);
             }}
         />
     );

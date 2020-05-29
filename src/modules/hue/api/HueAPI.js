@@ -52,6 +52,24 @@ class HueAPI {
         return this._makePOSTRequest(`/${this.username}${uri}`, body);
     };
 
+    getBulbs = () => this._makeGETRequest('/lights')
+        .then((lightsDictionary) => {
+            const lights = [];
+            for (let id in lightsDictionary) {
+                lights.push({...lightsDictionary[id], id:id})
+            }
+            return lights;
+        });
+
+    getGroups = () => this._makeGETRequest('/groups')
+        .then((lightsDictionary) => {
+            const lights = [];
+            for (let id in lightsDictionary) {
+                lights.push({...lightsDictionary[id], id:id})
+            }
+            return lights;
+        });
+
 }
 
 const discoverBridge = async () => {

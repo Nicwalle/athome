@@ -3,6 +3,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Text, useTheme} from 'react-native-paper';
 import {TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
+import HueIcon from './customIcons/HueIcons'
 
 export default function ToggleWidget(props) {
 
@@ -57,7 +58,7 @@ export default function ToggleWidget(props) {
                     flexDirection:width>1?'row':'column'
                 }}
             >
-                <Icon
+                <HueIcon
                     name={icon || 'power'}
                     color={'white'}
                     size={width>1?36:32}
