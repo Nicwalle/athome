@@ -69,14 +69,14 @@ class CreateHueToggleWidget extends React.Component{
         }
     });
 
-    addSelectedBulb = (value, id, index) => {
+    addSelectedBulb = (value, id, index, lightType = 'bulbs') => {
         const newState = {...this.state};
         if (value) {
-            newState.widget.lights.bulbs[id] = true;
+            newState.widget.lights[lightType][id] = true;
         } else {
-            delete newState.widget.lights.bulbs[id];
+            delete newState.widget.lights[lightType][id];
         }
-        newState.bulbs[index].selected = !this.state.bulbs[index].selected;
+        newState[lightType][index].selected = value;
         this.setState(newState);
     };
     addSelectedGroup = (value, id, index) => {
@@ -98,26 +98,31 @@ class CreateHueToggleWidget extends React.Component{
         }
     };
 
-    renderLightsList = (list, onChange) => {
+    renderLightsList = (list, onChange, lightsType) => {
         return list.map(
-            (bulb, index) => <List.Item
-                key={bulb.id}
-                title={bulb.name}
-                left={() =>{
-                    return <CheckBox
-                        value={bulb.selected}
-                        onValueChange={(value) => onChange(value, bulb.id, index)}
-                        style={{color:'red'}}
-                        tintColors={{true: this.colors.primary, false: this.colors.onSurface}}
-                    />
-                }}
-            />);
+            (light, index) => {
+                let title = light.name;
+                if (lightsType === 'groups') title += ` (${light.lights.length} lights)`;
+                return <List.Item
+                    key={light.id}
+                    title={title}
+                    left={() =>{
+                        return <CheckBox
+                            value={light.selected}
+                            onValueChange={(value) => onChange(value, light.id, index, lightsType)}
+                            style={{color:'red'}}
+                            tintColors={{true: this.colors.primary, false: this.colors.onSurface}}
+                        />
+                    }}
+                />
+            });
     };
 
     render () {
         return (
             <>
                 <TitleViewWithBackButton title={'Create Lights Toggle'}/>
+
                 <View style={{alignItems: 'center', marginHorizontal:8, marginVertical:24}}>
                     <Text style={{marginBottom:8}}>Preview in the grid (clickable)</Text>
                     <View style={{flexDirection: 'row'}}>
@@ -126,13 +131,16 @@ class CreateHueToggleWidget extends React.Component{
                         {this.state.widget.width<2 ? <MockUnitWidget/> : <></>}
                     </View>
                 </View>
+
                 <ScrollView style={{ paddingHorizontal:16}}>
+
                     <TextInput
                         mode={'outlined'}
                         label='Widget name'
                         value={this.state.name}
                         onChangeText={name => this.updateWidget({name})}
                     />
+
                     <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:16}}>
                         <Text style={{fontSize:18}}>Width on the grid:</Text>
                         <IncrementInput min={1} value={this.state.widget.width} max={3}
@@ -140,6 +148,7 @@ class CreateHueToggleWidget extends React.Component{
                                         onMinus={() => this.updateWidget({width: this.state.widget.width-1})}
                         />
                     </View>
+
                     <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:16}}>
                         <Text style={{fontSize:18}}>Color:</Text>
                         <GradientSelectorButton
@@ -147,6 +156,7 @@ class CreateHueToggleWidget extends React.Component{
                             color={this.state.widget.color}
                         />
                     </View>
+
                     <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:16}}>
                         <Text style={{fontSize:18}}>Icon:</Text>
                         <HueIconSelectorButton
@@ -160,19 +170,21 @@ class CreateHueToggleWidget extends React.Component{
                         <Text style={{fontSize:18}}>Select light(s):</Text>
                         <Text style={{fontSize:10, color: '#a6a6a6'}}>Selecting a group automatically includes all its lights</Text>
                         <List.Section>
+
                             <List.Accordion
                                 title="Lights"
                                 left={props => <CustomIcon {...props} style={{width:32, marginRight:8}} size={32} name={'hue-bulb'}/>}>
-                                {this.renderLightsList(this.state.bulbs, this.addSelectedBulb)}
+                                {this.renderLightsList(this.state.bulbs, this.addSelectedBulb, 'bulbs')}
                             </List.Accordion>
+
                             <List.Accordion
                                 title="Groups"
-                                left={props => <CustomIcon {...props} style={{width:32, marginRight:8}} size={32} name={'hue-bulb'}/>}>
-                                {this.renderLightsList(this.state.groups, this.addSelectedGroup)}
+                                left={props => <CustomIcon {...props} style={{width:32, marginRight:8}} size={32} name={'hue-group'}/>}>
+                                {this.renderLightsList(this.state.groups, this.addSelectedGroup, 'groups')}
                             </List.Accordion>
+
                         </List.Section>
                     </View>
-
 
                 </ScrollView>
                 <GradientSelectorBottomSheet

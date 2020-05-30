@@ -65,7 +65,8 @@ class HueAPI {
         .then((lightsDictionary) => {
             const lights = [];
             for (let id in lightsDictionary) {
-                lights.push({...lightsDictionary[id], id:id})
+                if (['Room', 'Zone'].includes(lightsDictionary[id].type))
+                    lights.push({...lightsDictionary[id], id:id})
             }
             return lights;
         });
