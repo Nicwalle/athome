@@ -24,7 +24,7 @@ class AddServiceSheet extends React.Component{
             .collection('Services')
             .onSnapshot(querySnapshot => {
                 let availableServices = [];
-                querySnapshot.forEach(documentSnapshot => {
+                if (querySnapshot !== null) querySnapshot.forEach(documentSnapshot => {
                     availableServices.push({
                         ...documentSnapshot.data(),
                         key: documentSnapshot.id
@@ -38,7 +38,10 @@ class AddServiceSheet extends React.Component{
         availableServices: []
     };
 
-    open = () => this.bottomSheetRef.current.snapTo(1);
+    open = () => {
+        if (this.state.availableServices.length === 0) this.loadAvailableServices();
+        this.bottomSheetRef.current.snapTo(1);
+    };
 
     close = () => this.bottomSheetRef.current.snapTo(2);
 
@@ -50,7 +53,7 @@ class AddServiceSheet extends React.Component{
                 icon={item.icon}
                 color={this.colors.onSurface}
                 onClick={() => {
-                    this.props.navigation.navigate(item.configPage || 'WidgetListPage', {
+                    this.props.navigation.navigate('WidgetListPage', {
                         serviceID: item.key
                     });
                     this.close();

@@ -19,7 +19,6 @@ class WidgetListPage extends React.Component{
         this.colors = props.theme.colors;
         let {serviceID} = props.route.params;
         this.serviceID = serviceID;
-        this.widgetCreationParams = props.route.params.widgetCreationParams || {};
     }
 
     componentDidMount(): void {
@@ -30,7 +29,7 @@ class WidgetListPage extends React.Component{
 
     handleFirebaseWidgets = (querySnapshot) => {
         let widgets = [];
-        querySnapshot.forEach(documentSnapshot => {
+        if (querySnapshot !== null) querySnapshot.forEach(documentSnapshot => {
             widgets.push({
                 ...documentSnapshot.data(),
                 key: documentSnapshot.id
@@ -46,7 +45,7 @@ class WidgetListPage extends React.Component{
             icon={item.icon}
             color={this.colors.onSurface}
             onClick={() => {
-                this.props.navigation.navigate(item.creationPage, this.widgetCreationParams);
+                this.props.navigation.navigate(item.creationPage);
             }}
         />
     );

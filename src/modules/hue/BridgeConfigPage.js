@@ -134,20 +134,13 @@ class BridgeConfigPage extends React.Component{
     };
 
     renderConfigurationDone = () => (<>
-        {this.props.navigation.navigate('WidgetListPage', {
-            serviceID: 'philips-hue',
-            widgetCreationParams: {
-                apiAddress: this.state.bridgeAddress,
-                username: this.state.username
-            }
-        })}
         <Image source={LightBulb} style={{height:300, aspectRatio: 1}}/>
         <Text style={{marginTop: 32, fontSize: 24, textAlign: 'center'}}>All set and ready to use</Text>
         <Button
             icon="plus"
             mode="outlined"
             style={{marginTop: 36}}
-            onPress={() => this.props.navigation.navigate('HueCreateWidgetListPage', {
+            onPress={() => this.props.navigation.navigate('CreateHueToggleWidget', {
                 apiAddress: this.state.bridgeAddress,
                 username: this.state.username
             })} >

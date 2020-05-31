@@ -45,21 +45,42 @@ class CreateHueToggleWidget extends React.Component{
             gradientSelectorBottomSheet: React.createRef(),
             hueIconSelectorBottomSheet: React.createRef()
         };
-
-        this.hueAPI = new HueAPI(props.route.params.apiAddress, props.route.params.username);
     }
 
     componentDidMount(): void {
-        this.hueAPI.getBulbs()
-            .then(bulbs => bulbs.map(bulb => ({...bulb, selected:false})))
-            .then(bulbs => {
-                this.setState({bulbs})
-            });
-        this.hueAPI.getGroups()
-            .then(groups => groups.map(group => ({...group, selected:false})))
-            .then(groups => {
-                this.setState({groups})
-            });
+        console.log("FIRST TIME", this.props.route.params)
+        if (this.props.route && this.props.route.params && this.props.route.params.apiAddress && this.props.route.params.username) {
+            console.log("I'M IN", this.props.route.params);
+            this.hueAPI = new HueAPI(this.props.route.params.apiAddress, this.props.route.params.username);
+            this.hueAPI.getBulbs()
+                .then(bulbs => bulbs.map(bulb => ({...bulb, selected:false})))
+                .then(bulbs => {
+                    this.setState({bulbs})
+                });
+            this.hueAPI.getGroups()
+                .then(groups => groups.map(group => ({...group, selected:false})))
+                .then(groups => {
+                    this.setState({groups})
+                });
+        }
+    }
+
+    componentDidUpdate(prevProps): void {
+        console.log("UPDATE",this.props.route.params)
+        if (this.props.route && this.props.route.params && this.props.route.params.apiAddress && this.props.route.params.username) {
+            console.log("I'M IN", this.props.route.params)
+            this.hueAPI = new HueAPI(this.props.route.params.apiAddress, this.props.route.params.username);
+            this.hueAPI.getBulbs()
+                .then(bulbs => bulbs.map(bulb => ({...bulb, selected:false})))
+                .then(bulbs => {
+                    this.setState({bulbs})
+                });
+            this.hueAPI.getGroups()
+                .then(groups => groups.map(group => ({...group, selected:false})))
+                .then(groups => {
+                    this.setState({groups})
+                });
+        }
     }
 
     updateWidget = (newState) => this.setState({
