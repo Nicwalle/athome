@@ -38,5 +38,10 @@ const styles = StyleSheet.create({
     goBackButton: {
         position: 'absolute',
         zIndex: 5
+    },
+    actionButton: {
+        position: 'absolute',
+        zIndex: 5,
+        right:8
     }
 });
