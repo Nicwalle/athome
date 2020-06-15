@@ -2,7 +2,7 @@ import React from 'react';
 import {withTheme, IconButton, TextInput, Text, List} from 'react-native-paper';
 import {FlatList, View, ScrollView} from 'react-native';
 import {} from './utils/FireStore';
-import TitleViewWithBackButton from '../app/TitleViewWithBackButton';
+import TitleViewWithBackButton from '../../components/TitleViewWithBackButton';
 import MockUnitWidget from '../../components/MockUnitWidget';
 import ToggleWidget from '../../components/ToggleWidget';
 import IncrementInput from '../../components/IncrementInput';
@@ -12,7 +12,10 @@ import HueIconSelectorBottomSheet from '../../components/HueIconSelectorBottomSh
 import HueIconSelectorButton from '../../components/HueIconSelectorButton';
 import CustomIcon from '../../components/customIcons/CustomIcon';
 import CheckBox from '@react-native-community/checkbox';
+import {connect} from 'react-redux';
 import {HueAPI} from './api/HueAPI';
+import {saveWidget} from './utils/FireStore';
+import {getUser} from '../../utils/Authentication';
 
 class CreateHueToggleWidget extends React.Component{
 
@@ -29,14 +32,12 @@ class CreateHueToggleWidget extends React.Component{
                 icon: 'power',
                 isOn: true,
                 width: 1,
-                lights: {
-                    groups: {}, // IDs of the groups
-                    bulbs: {}   // IDs of the bulbs
-                }
-
+                groups: {}, // IDs of the groups
+                lights: {},   // IDs of the bulbs
+                bridgeID: undefined
             },
             groups: [],
-            bulbs: [],
+            lights: [],
             showGradientSelectorSheet: false,
             showIconSelectorSheet: false
         };
@@ -45,69 +46,56 @@ class CreateHueToggleWidget extends React.Component{
             gradientSelectorBottomSheet: React.createRef(),
             hueIconSelectorBottomSheet: React.createRef()
         };
+        this.hueAPI = null;
     }
 
     componentDidMount(): void {
-        console.log("FIRST TIME", this.props.route.params)
-        if (this.props.route && this.props.route.params && this.props.route.params.apiAddress && this.props.route.params.username) {
-            console.log("I'M IN", this.props.route.params);
-            this.hueAPI = new HueAPI(this.props.route.params.apiAddress, this.props.route.params.username);
-            this.hueAPI.getBulbs()
-                .then(bulbs => bulbs.map(bulb => ({...bulb, selected:false})))
-                .then(bulbs => {
-                    this.setState({bulbs})
-                });
-            this.hueAPI.getGroups()
-                .then(groups => groups.map(group => ({...group, selected:false})))
-                .then(groups => {
-                    this.setState({groups})
-                });
+        if (Object.keys(this.props.bridges).length === 0) {
+            this.props.navigation.navigate("BridgeConfigPage")
+        } else if(Object.keys(this.props.bridges).length) {
+            this.updateWidget({bridgeID: Object.keys(this.props.bridges)[0]}, this.initAccordion);
         }
     }
 
-    componentDidUpdate(prevProps): void {
-        console.log("UPDATE",this.props.route.params)
-        if (this.props.route && this.props.route.params && this.props.route.params.apiAddress && this.props.route.params.username) {
-            console.log("I'M IN", this.props.route.params)
-            this.hueAPI = new HueAPI(this.props.route.params.apiAddress, this.props.route.params.username);
-            this.hueAPI.getBulbs()
-                .then(bulbs => bulbs.map(bulb => ({...bulb, selected:false})))
-                .then(bulbs => {
-                    this.setState({bulbs})
-                });
-            this.hueAPI.getGroups()
-                .then(groups => groups.map(group => ({...group, selected:false})))
-                .then(groups => {
-                    this.setState({groups})
-                });
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+        if (this.hueAPI === null) {
+            this.updateWidget({bridgeID: Object.keys(this.props.bridges)[0]}, this.initAccordion);
         }
     }
 
-    updateWidget = (newState) => this.setState({
-        widget: {
-            ...this.state.widget,
-            ...newState
-        }
-    });
+    initAccordion = () => {
+        this.hueAPI = new HueAPI(
+            this.props.bridges[this.state.widget.bridgeID].bridgeAddress,
+            this.props.bridges[this.state.widget.bridgeID].username
+        );
+        this.hueAPI.getLights()
+            .then(lights => lights.map(bulb => ({...bulb, selected:false})))
+            .then(lights => {
+                this.setState({lights})
+            });
+        this.hueAPI.getGroups()
+            .then(groups => groups.map(group => ({...group, selected:false})))
+            .then(groups => {
+                this.setState({groups})
+            });
+    };
 
-    addSelectedBulb = (value, id, index, lightType = 'bulbs') => {
+    updateWidget = (newState, callback = ()=>{}) =>
+        this.setState({
+            widget: {
+                ...this.state.widget,
+                ...newState
+            }
+        }, callback);
+
+    addSelectedLight = (value, id, index, lightType = 'lights') => {
         const newState = {...this.state};
         if (value) {
-            newState.widget.lights[lightType][id] = true;
+            newState.widget[lightType][id] = true;
         } else {
-            delete newState.widget.lights[lightType][id];
+            delete newState.widget[lightType][id];
         }
         newState[lightType][index].selected = value;
-        this.setState(newState);
-    };
-    addSelectedGroup = (value, id, index) => {
-        const newState = {...this.state};
-        if (value) {
-            newState.widget.lights.groups[id] = true;
-        } else {
-            delete newState.widget.lights.groups[id];
-        }
-        newState.groups[index].selected = !this.state.groups[index].selected;
         this.setState(newState);
     };
 
@@ -142,8 +130,7 @@ class CreateHueToggleWidget extends React.Component{
     render () {
         return (
             <>
-                <TitleViewWithBackButton title={'Create Lights Toggle'}/>
-
+                <TitleViewWithBackButton title={'Create Lights Toggle'} rightIcon={'check'} rightAction={()=>saveWidget(getUser().uid, this.state.widget)}/>
                 <View style={{alignItems: 'center', marginHorizontal:8, marginVertical:24}}>
                     <Text style={{marginBottom:8}}>Preview in the grid (clickable)</Text>
                     <View style={{flexDirection: 'row'}}>
@@ -195,13 +182,13 @@ class CreateHueToggleWidget extends React.Component{
                             <List.Accordion
                                 title="Lights"
                                 left={props => <CustomIcon {...props} style={{width:32, marginRight:8}} size={32} name={'hue-bulb'}/>}>
-                                {this.renderLightsList(this.state.bulbs, this.addSelectedBulb, 'bulbs')}
+                                {this.renderLightsList(this.state.lights, this.addSelectedLight, 'lights')}
                             </List.Accordion>
 
                             <List.Accordion
                                 title="Groups"
                                 left={props => <CustomIcon {...props} style={{width:32, marginRight:8}} size={32} name={'hue-group'}/>}>
-                                {this.renderLightsList(this.state.groups, this.addSelectedGroup, 'groups')}
+                                {this.renderLightsList(this.state.groups, this.addSelectedLight, 'groups')}
                             </List.Accordion>
 
                         </List.Section>
@@ -231,4 +218,10 @@ const hueIcons = [
     'power','heroesBloom','archetypesWallLantern','archetypesDeskLamp','roomsLiving','roomsCarport','roomsCloset','roomsComputer','roomsDining','roomsDriveway','roomsFrontdoor','roomsGarage','roomsGuestroom','roomsGym','roomsHallway','roomsKidsbedroom','roomsKitchen','roomsLaundryroom','roomsLiving1','roomsLounge','roomsMancave','roomsNursery','roomsOffice','roomsOther','roomsOutdoor','roomsOutdoorSocialtime','roomsPool','roomsPorch','roomsRecreation','roomsSocialtime','roomsStaircase','roomsStorage','roomsStudio','roomsTerrace','roomsToilet','routinesComingHome','routinesDaytime','routinesGoToSleep','routinesHomeAway','routinesLeavingHome','routinesLocation','routinesNighttime','routinesSunrise','tabbarExplore','otherChristmasTree','otherFire','otherHeart','otherMusic','otherReading','otherWatchingMovie','roomsBalcony','roomsBathroom',
 ];
 
-export default withTheme(CreateHueToggleWidget)
+const mapStateToProps = (state) => {
+    return {
+        bridges: state.bridges
+    };
+};
+
+export default connect(mapStateToProps)(withTheme(CreateHueToggleWidget))

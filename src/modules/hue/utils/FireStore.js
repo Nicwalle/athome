@@ -31,9 +31,20 @@ const deleteBridgeFromFirestore = async (userID, bridgeID) => firestore()
     .then(_=> console.log("Deleted invalid bridge", userID, bridgeID))
     .catch(err=> console.log(err));
 
+const saveWidget = async (userID, widget) => {
+    console.log(userID);
+    console.log(widget);
+    firestore()
+        .collection('Users').doc(userID)
+        .collection('Widgets')
+        .add(widget)
+        .catch(err=>console.log(err));
+};
+
 
 module.exports = {
     getFirestoreBridges,
     saveBridgeInFirestore,
-    deleteBridgeFromFirestore
+    deleteBridgeFromFirestore,
+    saveWidget
 };

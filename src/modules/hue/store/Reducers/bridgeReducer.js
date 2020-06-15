@@ -1,7 +1,3 @@
-const initialState = {
-    bridges: {}
-};
-
 function bridges(state, action) {
     let nextState;
     switch (action.type) {

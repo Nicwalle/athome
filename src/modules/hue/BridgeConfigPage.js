@@ -10,6 +10,7 @@ import {getUser, getOrAuthUser} from '../../utils/Authentication'
 import {getFirestoreBridges, saveBridgeInFirestore, deleteBridgeFromFirestore} from './utils/FireStore'
 
 import { getDeviceName } from 'react-native-device-info';
+import {connect} from 'react-redux';
 
 
 class BridgeConfigPage extends React.Component{
@@ -44,6 +45,11 @@ class BridgeConfigPage extends React.Component{
                                     bridgeAddress: apiAddress,
                                     username: username
                                 });
+                                const action = {type: 'ADD_BRIDGE', bridgeID, bridge: {
+                                        bridgeAddress: apiAddress,
+                                        username: username
+                                }};
+                                this.props.dispatch(action);
                             } else {
                                 deleteBridgeFromFirestore(getUser().uid, bridgeID).done();
                                 this.discoverBridge().done()
@@ -140,10 +146,7 @@ class BridgeConfigPage extends React.Component{
             icon="plus"
             mode="outlined"
             style={{marginTop: 36}}
-            onPress={() => this.props.navigation.navigate('CreateHueToggleWidget', {
-                apiAddress: this.state.bridgeAddress,
-                username: this.state.username
-            })} >
+            onPress={() => this.props.navigation.navigate('CreateHueToggleWidget')} >
             Configure widgets
         </Button>
     </>);
@@ -178,4 +181,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default withTheme(BridgeConfigPage)
+const mapStateToProps = (state) => {
+    return {
+        bridges: state.bridges
+    };
+};
+
+export default connect(mapStateToProps)(withTheme(BridgeConfigPage));

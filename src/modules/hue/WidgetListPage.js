@@ -6,7 +6,7 @@ import {} from './utils/FireStore'
 import firestore from '@react-native-firebase/firestore';
 import ListItemWithIcon from '../../components/ListItemWithIcon';
 import Empty from '../../../assets/images/empty.png'
-import TitleViewWithBackButton from '../app/TitleViewWithBackButton';
+import TitleViewWithBackButton from '../../components/TitleViewWithBackButton';
 
 
 
