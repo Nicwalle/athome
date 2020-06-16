@@ -3,7 +3,7 @@ import React from 'react';
 import {IconButton, withTheme} from 'react-native-paper';
 import AddServiceSheet from './addService/AddServiceSheet';
 
-class TitleView extends React.Component {
+class HomeTitle extends React.Component {
     colors;
     constructor(props) {
         super();
@@ -48,4 +48,4 @@ class TitleView extends React.Component {
     }
 }
 
-export default withTheme(TitleView);
+export default withTheme(HomeTitle);

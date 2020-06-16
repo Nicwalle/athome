@@ -1,9 +1,11 @@
 import React from 'react';
-import TitleView from './TitleView';
+import TitleView from './HomeTitle';
 import {RefreshControl, ScrollView} from 'react-native';
 import {CurtainsModule} from '../curtains/CurtainsModule';
 import {HueModule} from '../hue/HueModule';
-export default class HomePage extends React.Component{
+
+
+class HomePage extends React.Component{
 
     constructor() {
         super();
@@ -36,3 +38,5 @@ export default class HomePage extends React.Component{
         );
     }
 }
+
+export default HomePage;
