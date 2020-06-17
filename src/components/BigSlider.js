@@ -91,11 +91,7 @@ class BigSlider extends Component {
                     }
                     {this.props.renderLabel
                         ? this.props.renderLabel()
-                        : <View style={styles.trackLabel}>
-                            <Text style={styles.trackLabelText}>
-                                {this.props.label || `${formatNumber(this.props.value)}%`}
-                            </Text>
-                        </View>
+                        : <View style={styles.trackLabel}/>
                     }
                     <View style={styles.thumb} />
                 </View>
