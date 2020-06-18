@@ -16,6 +16,7 @@ import {connect} from 'react-redux';
 import {HueAPI} from './api/HueAPI';
 import {saveWidget} from './utils/FireStore';
 import {getUser} from '../../utils/Authentication';
+import {StackActions} from '@react-navigation/native';
 
 class CreateHueToggleWidget extends React.Component{
 
@@ -51,15 +52,23 @@ class CreateHueToggleWidget extends React.Component{
 
     componentDidMount(): void {
         if (Object.keys(this.props.bridges).length === 0) {
-            this.props.navigation.navigate("BridgeConfigPage")
+            this.props.navigation.dispatch(
+                StackActions.replace('BridgeConfigPage')
+            );
+            //this.props.navigation.navigate("BridgeConfigPage")
         } else if(Object.keys(this.props.bridges).length) {
             this.updateWidget({bridgeID: Object.keys(this.props.bridges)[0]}, this.initAccordion);
         }
     }
 
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+    componentDidUpdate(): void {
         if (this.hueAPI === null) {
-            this.updateWidget({bridgeID: Object.keys(this.props.bridges)[0]}, this.initAccordion);
+            console.log("HueAPI:", this.hueAPI);
+            try {
+                this.updateWidget({bridgeID: Object.keys(this.props.bridges)[0]}, this.initAccordion);
+            } catch (e) {
+                console.log("Error, no bridge")
+            }
         }
     }
 
